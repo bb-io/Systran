@@ -5,13 +5,13 @@ using Blackbird.Applications.Sdk.Common.Invocation;
 
 namespace Apps.App.Invocables;
 
-public class AppInvocable : BaseInvocable
+public class SystranInvocable : BaseInvocable
 {
     protected AuthenticationCredentialsProvider[] Creds =>
         InvocationContext.AuthenticationCredentialsProviders.ToArray();
 
-    protected AppClient Client { get; }
-    public AppInvocable(InvocationContext invocationContext) : base(invocationContext)
+    protected SystranClient Client {  get; set; }
+    public SystranInvocable(InvocationContext invocationContext) : base(invocationContext)
     {
         Client = new(Creds);
     }

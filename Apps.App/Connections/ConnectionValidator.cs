@@ -13,11 +13,20 @@ public class ConnectionValidator: IConnectionValidator
     {
         try
         {
-            var request = new SystranRequest("/translation/status", Method.Get);
+            var request = new SystranRequest("/translation/apiVersion", Method.Get);
+            var response = await new SystranClient(authenticationCredentialsProviders).ExecuteWithErrorHandling(request);
+            return new()
+            {
+                IsValid = true,
+            };
         }
         catch(Exception ex)
         {
-
+            return new()
+            {
+                IsValid = false,
+                Message = ex.Message
+            };
         }
     }
 }
