@@ -10,11 +10,12 @@ public class ConnectionDefinition : IConnectionDefinition
     {
         new()
         {
-            Name = "Developer API key",
+            Name = "Api Key",
             AuthenticationType = ConnectionAuthenticationType.Undefined,
             ConnectionProperties = new List<ConnectionProperty>
             {
-                new(CredsNames.Token) { DisplayName = "API Token", Sensitive = true}
+                new(CredsNames.Url) { DisplayName = "Instance URL" },
+                new(CredsNames.ApiKey) { DisplayName = "API Key", Sensitive = true}
             }
         }
     };
