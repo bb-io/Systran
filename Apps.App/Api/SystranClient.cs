@@ -39,10 +39,10 @@ public class SystranClient : BlackBirdRestClient
 
     public override async Task<RestResponse> ExecuteWithErrorHandling(RestRequest request)
     {
+       
         var restResponse = await ExecuteAsync(request);
         if (!restResponse.IsSuccessStatusCode)
             throw ConfigureErrorException(restResponse);
-
         try
         {
             var error = JsonConvert.DeserializeObject<SystranError>(restResponse.Content!);
