@@ -45,5 +45,24 @@ namespace SystranTests
             Assert.AreNotEqual(0, data.Count(), "No corpora were returned.");
         }
 
+
+            [TestMethod]
+            public async Task GetProfilesReturnsExpectedResults()
+            {
+                // Arrange
+                var handler = new ProfilesDataHandler(InvocationContext);
+
+                // Act
+                var profiles = await handler.GetDataAsync(new DataSourceContext { SearchString = "" }, CancellationToken.None);
+
+                // Assert
+                Assert.IsNotNull(profiles, "Profiles list is null.");
+                Assert.IsTrue(profiles.Any(), "No profiles returned.");
+                foreach (var profile in profiles)
+                {
+                    Console.WriteLine($"{profile.Value}: {profile.DisplayName}");
+                }
+            }
+
     }
 }
