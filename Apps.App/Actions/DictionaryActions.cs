@@ -9,6 +9,7 @@ using Apps.Systran.Models.Request;
 using Apps.Systran.Models.Response;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Files;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Glossaries.Utils.Converters;
@@ -42,10 +43,9 @@ namespace Apps.Systran.Actions
             var createResponse = await Client.ExecuteWithErrorHandling<CreateDictionaryResponse>(createDictionaryRequest);
 
             if (createResponse.Error != null)
-                throw new Exception($"Failed to create dictionary: {createResponse.Error.Message}");
+                throw new PluginApplicationException($"Failed to create dictionary: {createResponse.Error.Message}");
 
             var dictionaryId = createResponse.Added.Id;
-            Console.WriteLine($"Dictionary created successfully with ID: {dictionaryId}");
 
             var systranFormattedContent = await ConvertTbxToSystranFormat(parameters.TbxFile, parameters.SourceLang, parameters.TargetLangs);
 
@@ -100,9 +100,6 @@ namespace Apps.Systran.Actions
             }
 
             string tsvContent = entries.ToString();
-
-            Console.WriteLine("Generated TSV Content:");
-            Console.WriteLine(tsvContent);
 
             return tsvContent;
         }
