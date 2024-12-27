@@ -12,7 +12,7 @@ namespace Apps.Systran.Models.Response
         public ErrorResponse? Error { get; set; }
         public string RequestId { get; set; } = string.Empty;
 
-        public FileReference File {  get; set; }
+        public FileReference? File {  get; set; }
     }
 
 

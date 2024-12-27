@@ -9,9 +9,6 @@ namespace Apps.Systran.Models.Response
 {
     public class TranslateTextResponse
     {
-        [Display("Error")]
-        public ErrorResponse? Error { get; set; }
-
         [Display("Request ID")]
         public string RequestId { get; set; } = string.Empty;
 
@@ -21,9 +18,6 @@ namespace Apps.Systran.Models.Response
 
     public class TranslationOutput
     {
-        [Display("Error")]
-        public string? Error { get; set; }
-
         [Display("Info")]
         public TranslationInfo? Info { get; set; }
 
@@ -42,11 +36,6 @@ namespace Apps.Systran.Models.Response
         [Display("Language identification")]
         public LanguageIdentification? Lid { get; set; }
 
-        [Display("Selected routes")]
-        public List<SelectedRoute>? SelectedRoutes { get; set; }
-
-        [Display("Statistics")]
-        public object? Stats { get; set; }
     }
 
     public class LanguageIdentification
@@ -56,31 +45,5 @@ namespace Apps.Systran.Models.Response
 
         [Display("Confidence level")]
         public float Confidence { get; set; }
-    }
-
-    public class SelectedRoute
-    {
-        [Display("Routes")]
-        public List<RouteDetail> Routes { get; set; } = new();
-
-        [Display("Step name")]
-        public string StepName { get; set; } = string.Empty;
-    }
-    public class RouteDetail
-    {
-        [Display("Profile ID")]
-        public string ProfileId { get; set; } = string.Empty;
-
-        [Display("Queue")]
-        public string Queue { get; set; } = string.Empty;
-
-        [Display("Service")]
-        public string Service { get; set; } = string.Empty;
-
-        [Display("Version")]
-        public int Version { get; set; }
-
-        [Display("Selectors")]
-        public object? Selectors { get; set; }
     }
 }
