@@ -368,3 +368,8 @@ FodyWeavers.xsd
 /ConsoleApp1/ConsoleApp1.csproj
 /ConsoleApp1/Program.cs
 /SystranTests/appsettings.json
+/SystranTests/TestFiles/676d81b85f6f31e36a019213
+/SystranTests/TestFiles/test.tmx
+/SystranTests/TestFiles/Translate.txt
+/SystranTests/TestFiles/Translate_output.txt
+/SystranTests/TestFiles/Translate_output_translated.txt

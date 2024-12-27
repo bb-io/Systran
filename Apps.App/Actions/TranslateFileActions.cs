@@ -66,9 +66,19 @@ namespace Apps.Systran.Actions
             
             request.AddFile("input", () => fileStream, input.Input.Name);
 
-            var response = await Client.ExecuteWithErrorHandling<TranslateFileResponse>(request);
+            var rawResponse = await Client.ExecuteAsync(request);
+            if (!rawResponse.IsSuccessful || rawResponse.RawBytes == null)
+                throw new PluginApplicationException($"Failed to translate file. Status: {rawResponse.StatusCode}, Error: {rawResponse.ErrorMessage}");
 
-            return response;
+            var translatedFile = await fileManagementClient.UploadAsync(
+         new MemoryStream(rawResponse.RawBytes),
+         rawResponse.ContentType,
+         $"{Path.GetFileNameWithoutExtension(input.Input.Name)}_translated{Path.GetExtension(input.Input.Name)}");
+
+            return new TranslateFileResponse
+            {
+                File = translatedFile
+            };
         }
     }
 }
