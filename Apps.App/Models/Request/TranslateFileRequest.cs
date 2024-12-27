@@ -15,14 +15,5 @@ namespace Apps.Systran.Models.Request
         [Display("Profile ID")]
         [DataSource(typeof(ProfilesDataHandler))]
         public string? Profile { get; set; }
-
-        [Display("With info")]
-        public bool? WithInfo { get; set; }
-
-        [Display("With source")]
-        public bool? WithSource { get; set; }
-
-        [Display("With annotations")]
-        public bool? WithAnnotations { get; set; }
     }
 }

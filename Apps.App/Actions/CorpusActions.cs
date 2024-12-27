@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Mime;
 using Apps.App.Api;
 using Apps.App.Invocables;
 using Apps.Systran.Models.Request;
@@ -23,34 +18,42 @@ namespace Apps.Systran.Actions
     {
 
         [Action("Export corpus", Description = "Export a corpus file by its ID")]
-        public async Task<FileReference> ExportCorpus([ActionParameter] ExportCorpusParameters parameters)
+        public async Task<FileReferenceResponse> ExportCorpus([ActionParameter] ExportCorpusParameters parameters)
         {
             var request = new SystranRequest($"/resources/corpus/export", RestSharp.Method.Get);
             request.AddQueryParameter("corpusId", parameters.CorpusId);
 
-            var response = await Client.ExecuteAsync(request, cancellationToken: default);
-            if (!response.IsSuccessful || response.RawBytes == null)
-                throw new Exception($"Failed to export corpus. Status: {response.StatusCode}, Error: {response.ErrorMessage}");
+            var response = await Client.DownloadStreamAsync(request);
+            if (response == null)
+                throw new PluginApplicationException($"Failed to export corpus. Response stream is null.");
 
-
-            await using var memoryStream = new MemoryStream(response.RawBytes);
 
             var fileReference = await fileManagementClient.UploadAsync(
-                memoryStream,
-                response.ContentType,
-                parameters.CorpusId 
-             );
+                    response,
+                    "application/x-tmx+xml",
+                    parameters.CorpusId
+                );
 
-            return fileReference;
+            return new FileReferenceResponse{
+                FileResponse = fileReference
+            };
         }
 
         [Action("Import corpus from TMX file", Description = "Add a new corpus from an existing corpus.")]
         public async Task<ImportCorpusResponse> ImportCorpus([ActionParameter] ImportCorpusParameters parameters)
         {
-            var request = new SystranRequest($"/resources/corpus/import", RestSharp.Method.Post);
+            if (parameters.InputFile == null)
+                throw new PluginMisconfigurationException("Input file must be provided.");
+
+            var fileStream = await fileManagementClient.DownloadAsync(parameters.InputFile);
+
+            var request = new SystranRequest($"/resources/corpus/import", RestSharp.Method.Post)
+            {
+                AlwaysMultipartFormData = true
+            };
 
             request.AddQueryParameter("name", parameters.Name);
-            request.AddQueryParameter("format", parameters.Format);
+            request.AddQueryParameter("format", "application/x-tmx+xml");
 
             if (parameters.Tag != null && parameters.Tag.Any())
             {
@@ -60,30 +63,14 @@ namespace Apps.Systran.Actions
                 }
             }
 
-            if (!string.IsNullOrEmpty(parameters.Input))
-            {
-                request.AddParameter("input", parameters.Input);
-            }
-            else if (parameters.InputFile != null)
-            {
-                var fileBytes = await fileManagementClient.DownloadAsync(parameters.InputFile);
-                using (var memoryStream = new MemoryStream())
-                {
-                    await fileBytes.CopyToAsync(memoryStream); 
-                    request.AddFile("inputFile", memoryStream.ToArray(), parameters.InputFile.Name, MediaTypeNames.Application.Octet);
-                }
-            }
-            else
-            {
-                throw new PluginMisconfigurationException("Either input or inputFile must be provided");
-            }
+            request.AddFile("inputFile", () => fileStream, parameters.InputFile.Name, "application/x-tmx+xml");
 
-            var response = await Client.ExecuteAsync<ImportCorpusResponse>(request);
+            var response = await Client.ExecuteWithErrorHandling<ImportCorpusResponse>(request);
 
-            return response.Data;
+            return response;
         }
     }
 
 
-    
+
 }

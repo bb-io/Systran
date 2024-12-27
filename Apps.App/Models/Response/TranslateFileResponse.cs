@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Files;
 
 namespace Apps.Systran.Models.Response
 {
     public class TranslateFileResponse
     {
-        public ErrorResponse? Error { get; set; }
+        [Display("Request ID")]
         public string RequestId { get; set; } = string.Empty;
 
-        public FileReference? File {  get; set; }
+        [Display("File")]
+        public FileReference? File { get; set; }
     }
 
 

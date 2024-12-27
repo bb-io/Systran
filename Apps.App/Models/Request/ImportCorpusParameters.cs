@@ -10,13 +10,6 @@ namespace Apps.Systran.Models.Request
         [Display("Corpus name")]
         public string Name { get; set; }
 
-        [Display("Format")]
-        [StaticDataSource(typeof(CorpusFormatDataHandler))]
-        public string Format { get; set; }
-
-        [Display("Input",Description = "Content of the existing corpus")]
-        public string? Input { get; set; }
-
         [Display("Input file")]
         public FileReference? InputFile { get; set; }
 
