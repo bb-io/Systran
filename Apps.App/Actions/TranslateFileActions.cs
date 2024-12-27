@@ -61,12 +61,6 @@ namespace Apps.Systran.Actions
                 request.AddQueryParameter("target", options.Target);
             if (!string.IsNullOrEmpty(input.Profile))
                 request.AddQueryParameter("profile", input.Profile);
-            if (input.WithInfo == true)
-                request.AddQueryParameter("withInfo", "true");
-            if (input.WithSource == true)
-                request.AddQueryParameter("withSource", "true");
-            if (input.WithAnnotations == true)
-                request.AddQueryParameter("withAnnotations", "true");
 
             var fileStream = await fileManagementClient.DownloadAsync(input.Input);
             
