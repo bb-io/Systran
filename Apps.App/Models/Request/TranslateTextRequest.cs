@@ -1,6 +1,5 @@
-﻿using Apps.Systran.DataSourceHandlers.EnumDataHandlers;
+﻿using Apps.Systran.DataSourceHandlers;
 using Blackbird.Applications.Sdk.Common;
-using Blackbird.Applications.Sdk.Common.Dictionaries;
 using Blackbird.Applications.Sdk.Common.Dynamic;
 
 namespace Apps.Systran.Models.Request
@@ -11,6 +10,7 @@ namespace Apps.Systran.Models.Request
         public string Input { get; set; }
 
         [Display("Profile ID")]
+        [DataSource(typeof(ProfilesDataHandler))]
         public string? Profile { get; set; }
 
         [Display("With info")]
