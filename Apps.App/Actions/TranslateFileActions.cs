@@ -63,7 +63,7 @@ namespace Apps.Systran.Actions
                 request.AddQueryParameter("profile", input.Profile);
 
             var fileStream = await fileManagementClient.DownloadAsync(input.Input);
-            
+
             request.AddFile("input", () => fileStream, input.Input.Name);
 
             var rawResponse = await Client.ExecuteAsync(request);
@@ -78,6 +78,43 @@ namespace Apps.Systran.Actions
             return new TranslateFileResponse
             {
                 File = translatedFile
+            };
+        }
+
+
+
+        [Action("Translate file(Batch)", Description = "Translate a file from source language to target language")]
+        public async Task<TranslateFileAsyncResponse> TranslateFileAsync([ActionParameter] TranslateLanguagesOptions options, [ActionParameter] TranslateFileRequest input)
+        {
+
+            var inputType = input.Input.ContentType;
+            if (!InputFormats.Contains(inputType))
+                throw new PluginMisconfigurationException($"Unsupported file format: {inputType}. Please provide a file with one of the supported formats.");
+
+            var request = new SystranRequest("/translation/file/translate", Method.Post)
+            {
+                AlwaysMultipartFormData = true
+            };
+
+            if (!string.IsNullOrEmpty(options.Source))
+                request.AddQueryParameter("source", options.Source);
+            if (!string.IsNullOrEmpty(options.Target))
+                request.AddQueryParameter("target", options.Target);
+            if (!string.IsNullOrEmpty(input.Profile))
+                request.AddQueryParameter("profile", input.Profile);
+
+            request.AddQueryParameter("async", true);
+
+
+            using var fileStream = await fileManagementClient.DownloadAsync(input.Input);
+
+            request.AddFile("input", () => fileStream, input.Input.Name);
+
+            var rawResponse = await Client.ExecuteWithErrorHandling<TranslateFileAsyncResponse>(request);
+           
+            return new TranslateFileAsyncResponse
+            {
+                RequestId = rawResponse.RequestId
             };
         }
     }
