@@ -24,21 +24,28 @@ namespace Apps.Systran.Actions
             request.AddQueryParameter("corpusId", parameters.CorpusId);
 
             var response = await Client.DownloadStreamAsync(request);
-            if (response == null)
-                throw new PluginApplicationException($"Failed to export corpus. Response stream is null.");
+            if (response == null || !response.CanRead)
+                throw new PluginApplicationException($"Failed to export corpus. Response stream is null or unreadable.");
 
             var fileName = parameters.CorpusId.EndsWith(".tmx", StringComparison.OrdinalIgnoreCase)
                 ? parameters.CorpusId
-        :       $"{parameters.CorpusId}.tmx";
+                : $"{parameters.CorpusId}.tmx";
 
-            var fileReference = await fileManagementClient.UploadAsync(
-                response,
-                "application/x-tmx+xml",
-                fileName);
+            using (var memoryStream = new MemoryStream())
+            {
+                await response.CopyToAsync(memoryStream);
+                memoryStream.Position = 0;
 
-            return new FileReferenceResponse{
-                FileResponse = fileReference
-            };
+                var fileReference = await fileManagementClient.UploadAsync(
+                    memoryStream,
+                    "application/x-tmx+xml",
+                    fileName);
+
+                return new FileReferenceResponse
+                {
+                    FileResponse = fileReference
+                };
+            }
         }
 
         [Action("Import corpus from TMX file", Description = "Add a new corpus from an existing corpus.")]
