@@ -1,0 +1,2 @@
+<?xml version="1.0"?>
+<!DOCTYPE tmx SYSTEM "tmx14.dtd"><tmx version="1.4"><header creationtool="systran-corpus-manager" creationtoolversion="1.0" segtype="sentence" o-tmf="" adminlang="en_US" srclang="en" datatype="unknown"/><body><tu><tuv xml:lang="en"><seg>Hello</seg></tuv><tuv xml:lang="de"><seg>Halo</seg></tuv></tu><tu><tuv xml:lang="en"><seg>COdex</seg></tuv><tuv xml:lang="de"><seg>COdex</seg></tuv></tu></body></tmx>

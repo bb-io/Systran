@@ -82,7 +82,6 @@ namespace SystranTests
         [TestMethod]
         public async Task ExportCorpus_ValidCorpusId_ReturnsFileReference()
         {
-            var testFileName = "exported-corpus.tmx";
             var corpusId = "676d81b85f6f31e36a019213";
             var expectedContentType = "application/x-tmx+xml";
 

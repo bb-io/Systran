@@ -16,7 +16,7 @@ namespace SystranTests.Base
 
         public Task<FileReference> UploadAsync(Stream stream, string contentType, string fileName)
         {
-            var path = Path.Combine(folderLocation, $"{fileName}");
+            var path = Path.Combine(folderLocation, $"Output/{fileName}");
             new FileInfo(path).Directory.Create();
             using (var fileStream = File.Create(path))
             {

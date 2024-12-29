@@ -27,12 +27,14 @@ namespace Apps.Systran.Actions
             if (response == null)
                 throw new PluginApplicationException($"Failed to export corpus. Response stream is null.");
 
+            var fileName = parameters.CorpusId.EndsWith(".tmx", StringComparison.OrdinalIgnoreCase)
+                ? parameters.CorpusId
+        :       $"{parameters.CorpusId}.tmx";
 
             var fileReference = await fileManagementClient.UploadAsync(
-                    response,
-                    "application/x-tmx+xml",
-                    parameters.CorpusId
-                );
+                response,
+                "application/x-tmx+xml",
+                fileName);
 
             return new FileReferenceResponse{
                 FileResponse = fileReference
@@ -46,6 +48,9 @@ namespace Apps.Systran.Actions
                 throw new PluginMisconfigurationException("Input file must be provided.");
 
             var fileStream = await fileManagementClient.DownloadAsync(parameters.InputFile);
+            var fileName = parameters.InputFile.Name.EndsWith(".tmx", StringComparison.OrdinalIgnoreCase)
+                            ? parameters.InputFile.Name
+                            : $"{parameters.InputFile.Name}.tmx";
 
             var request = new SystranRequest($"/resources/corpus/import", RestSharp.Method.Post)
             {
@@ -63,7 +68,7 @@ namespace Apps.Systran.Actions
                 }
             }
 
-            request.AddFile("inputFile", () => fileStream, parameters.InputFile.Name, "application/x-tmx+xml");
+            request.AddFile("inputFile", () => fileStream, fileName, "application/x-tmx+xml");
 
             var response = await Client.ExecuteWithErrorHandling<ImportCorpusResponse>(request);
 

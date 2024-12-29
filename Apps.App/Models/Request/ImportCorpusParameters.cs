@@ -11,7 +11,7 @@ namespace Apps.Systran.Models.Request
         public string Name { get; set; }
 
         [Display("Input file")]
-        public FileReference? InputFile { get; set; }
+        public FileReference InputFile { get; set; }
 
         [Display("Tag")]
         public string[]? Tag { get; set; }
