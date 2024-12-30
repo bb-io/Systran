@@ -22,9 +22,9 @@ namespace Apps.Systran.Actions
     {
         [Action("Create dictionary", Description = "Create a dictionary and populate it using a TBX file")]
         public async Task<CreateDictionaryResponse> CreateDictionary(
-            [ActionParameter] CreateDictionaryParameters parameters, [ActionParameter] TranslateLanguagesOptions options)
+            [ActionParameter] CreateDictionaryParameters parameters,
+            [ActionParameter] TranslateLanguagesOptions options)
         {
-
             var createDictionaryRequest = new SystranRequest("/resources/dictionary/add", Method.Post);
             createDictionaryRequest.AddJsonBody(new
             {
@@ -64,9 +64,7 @@ namespace Apps.Systran.Actions
                 throw new PluginApplicationException($"Failed to import entries: {importResponse.Error.Message}");
 
             return createResponse;
-
         }
-
 
         private async Task<string> ConvertTbxToSystranFormat(FileReference tbxFile, string sourceLang, string targetLang)
         {
@@ -102,7 +100,6 @@ namespace Apps.Systran.Actions
             return tsvContent;
         }
 
-
         [Action("Export dictionary", Description = "Export dictionary as TBX file")]
         public async Task<FileReferenceResponse> ExportDictionary([ActionParameter] ExportDictionaryRequest parameters)
         {
@@ -117,23 +114,23 @@ namespace Apps.Systran.Actions
             }
 
             var conceptEntries = listEntriesResponse.Entries.Select(entry =>
-                 new GlossaryConceptEntry(entry.SourceId, new List<GlossaryLanguageSection>
-                 {
+                new GlossaryConceptEntry(entry.SourceId, new List<GlossaryLanguageSection>
+                {
                     new GlossaryLanguageSection(entry.SourceLang, new List<GlossaryTermSection>
                     {
                         new GlossaryTermSection(entry.Source)
                         {
                             PartOfSpeech = Enum.TryParse<PartOfSpeech>(entry.PartOfSpeech, true, out var sourcePos) ? sourcePos : null
                         }
-            }),
-                new GlossaryLanguageSection(entry.TargetLang, new List<GlossaryTermSection>
-                {
-                new GlossaryTermSection(entry.Target)
-                {
-                    PartOfSpeech = Enum.TryParse<PartOfSpeech>(entry.PartOfSpeech, true, out var targetPos) ? targetPos : null
-                }
-            })
-        })).ToList();
+                    }),
+                    new GlossaryLanguageSection(entry.TargetLang, new List<GlossaryTermSection>
+                    {
+                        new GlossaryTermSection(entry.Target)
+                        {
+                            PartOfSpeech = Enum.TryParse<PartOfSpeech>(entry.PartOfSpeech, true, out var targetPos) ? targetPos : null
+                        }
+                    })
+                })).ToList();
 
             var glossary = new Glossary(conceptEntries)
             {
@@ -141,9 +138,7 @@ namespace Apps.Systran.Actions
                 SourceDescription = $"Exported from dictionary ID: {parameters.DictionaryId}"
             };
 
-
             using var tbxStream = glossary.ConvertToTbx();
-
 
             var fileReference = await fileManagementClient.UploadAsync(
                 tbxStream,
@@ -158,8 +153,8 @@ namespace Apps.Systran.Actions
 
         [Action("Update dictionary from TBX file", Description = "Update an existing dictionary by importing entries from a TBX file")]
         public async Task<UpdateDictionaryResponse> UpdateDictionary(
-    [ActionParameter] UpdateDictionaryRequest parameters,
-    [ActionParameter] TranslateLanguagesOptions options)
+            [ActionParameter] UpdateDictionaryRequest parameters,
+            [ActionParameter] TranslateLanguagesOptions options)
         {
             var systranFormattedContent = await ConvertTbxToSystranFormat(parameters.File, options.Source, options.Target);
 
@@ -193,4 +188,3 @@ namespace Apps.Systran.Actions
         }
     }
 }
-

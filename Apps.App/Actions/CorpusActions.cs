@@ -14,7 +14,6 @@ namespace Apps.Systran.Actions
     [ActionList]
     public class CorpusActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : SystranInvocable(invocationContext)
     {
-
         [Action("Export corpus", Description = "Export a corpus file by its ID")]
         public async Task<FileReferenceResponse> ExportCorpus([ActionParameter] ExportCorpusParameters parameters)
         {
@@ -23,7 +22,7 @@ namespace Apps.Systran.Actions
 
             var response = await Client.DownloadStreamAsync(request);
             if (response == null || !response.CanRead)
-                throw new PluginApplicationException($"Failed to export corpus. Response stream is null or unreadable.");
+                throw new PluginApplicationException("Failed to export corpus. Response stream is null or unreadable.");
 
             var fileName = parameters.CorpusId.EndsWith(".tmx", StringComparison.OrdinalIgnoreCase)
                 ? parameters.CorpusId
@@ -54,8 +53,8 @@ namespace Apps.Systran.Actions
 
             var fileStream = await fileManagementClient.DownloadAsync(parameters.InputFile);
             var fileName = parameters.InputFile.Name.EndsWith(".tmx", StringComparison.OrdinalIgnoreCase)
-                            ? parameters.InputFile.Name
-                            : $"{parameters.InputFile.Name}.tmx";
+                ? parameters.InputFile.Name
+                : $"{parameters.InputFile.Name}.tmx";
 
             var request = new SystranRequest($"/resources/corpus/import", RestSharp.Method.Post)
             {
@@ -80,7 +79,4 @@ namespace Apps.Systran.Actions
             return response;
         }
     }
-
-
-
 }

@@ -8,7 +8,7 @@ namespace Apps.Systran.Models
     {
         [Display("Source language code")]
         [StaticDataSource(typeof(LanguageCodeDataHandler))]
-        public string? Source { get; set; }
+        public string Source { get; set; }
 
         [Display("Target language code")]
         [StaticDataSource(typeof(LanguageCodeDataHandler))]

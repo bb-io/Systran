@@ -16,7 +16,7 @@ namespace Tests.Systran
 
             var parameters = new ImportCorpusParameters
             {
-                Name = "Test Corpus1112",
+                Name = "Test Corpus111232",
                 InputFile = fileReference,
                 Tag = new[] { "tag1", "tag2" }
             };
