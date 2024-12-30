@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Apps.Systran.Actions;
+﻿using Apps.Systran.Actions;
 using Apps.Systran.Models.Request;
 using SystranTests.Base;
 
@@ -21,7 +16,7 @@ namespace Tests.Systran
 
             var parameters = new ImportCorpusParameters
             {
-                Name = "Test Corpus111",
+                Name = "Test Corpus1112",
                 InputFile = fileReference,
                 Tag = new[] { "tag1", "tag2" }
             };

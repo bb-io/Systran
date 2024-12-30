@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using Apps.App.Api;
 using Apps.App.Invocables;
 using Apps.Systran.Models;
@@ -18,7 +13,6 @@ using Blackbird.Applications.Sdk.Glossaries.Utils.Converters;
 using Blackbird.Applications.Sdk.Glossaries.Utils.Dtos;
 using Blackbird.Applications.Sdk.Glossaries.Utils.Dtos.Enums;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
-using DocumentFormat.OpenXml.Spreadsheet;
 using RestSharp;
 
 namespace Apps.Systran.Actions
@@ -110,7 +104,7 @@ namespace Apps.Systran.Actions
 
 
         [Action("Export dictionary", Description = "Export dictionary as TBX file")]
-        public async Task<ExportDictionaryResponse> ExportDictionary([ActionParameter] ExportDictionaryRequest parameters)
+        public async Task<FileReferenceResponse> ExportDictionary([ActionParameter] ExportDictionaryRequest parameters)
         {
             var listEntriesRequest = new SystranRequest("/resources/dictionary/entry/list", Method.Post);
             listEntriesRequest.AddQueryParameter("dictionaryId", parameters.DictionaryId);
@@ -156,9 +150,9 @@ namespace Apps.Systran.Actions
                 "application/x-tbx+xml",
                 $"{parameters.DictionaryId}.tbx");
 
-            return new ExportDictionaryResponse
+            return new FileReferenceResponse
             {
-                File = fileReference
+                FileResponse = fileReference
             };
         }
 

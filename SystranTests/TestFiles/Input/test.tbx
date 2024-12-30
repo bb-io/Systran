@@ -46,6 +46,40 @@
 		<conceptEntry id="0">
 			<langSec xml:lang="en">
 				<termSec>
+					<term>Father</term>
+					<termNote type="termId">U7BLQQX1x245YA88LCwgWXcH1</termNote>
+					<termNote type="partOfSpeech">noun</termNote>
+					<termNote type="forbidden">false</termNote>
+					<termNote type="preferred">false</termNote>
+					<termNote type="exactMatch">false</termNote>
+					<termNote type="status">Approved</termNote>
+					<termNote type="caseSensitive">false</termNote>
+					<termNote type="createdBy">maksym.kharchenko@blackbird.io</termNote>
+					<termNote type="createdAt">1706108407396</termNote>
+					<termNote type="lastModifiedBy">maksym.kharchenko@blackbird.io</termNote>
+					<termNote type="lastModifiedAt">1706108407396</termNote>
+				</termSec>
+			</langSec>
+			<langSec xml:lang="es">
+				<termSec>
+					<term>Padre</term>
+					<termNote type="termId">LBF5zmYqMf823X4c0e1aB7522</termNote>
+					<termNote type="partOfSpeech">noun</termNote>
+					<termNote type="forbidden">false</termNote>
+					<termNote type="preferred">false</termNote>
+					<termNote type="exactMatch">false</termNote>
+					<termNote type="status">Approved</termNote>
+					<termNote type="caseSensitive">false</termNote>
+					<termNote type="createdBy">maksym.kharchenko@blackbird.io</termNote>
+					<termNote type="createdAt">1706108407400</termNote>
+					<termNote type="lastModifiedBy">maksym.kharchenko@blackbird.io</termNote>
+					<termNote type="lastModifiedAt">1706108407400</termNote>
+				</termSec>
+			</langSec>
+		</conceptEntry>
+		<conceptEntry id="0">
+			<langSec xml:lang="en">
+				<termSec>
 					<term>Mother</term>
 					<termNote type="termId">U7BLQQX1x245YA88LCwgWXcH2</termNote>
 					<termNote type="partOfSpeech">noun</termNote>

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Apps.App.Dto;
+﻿using Apps.App.Dto;
 using Blackbird.Applications.Sdk.Common;
 
 namespace Apps.Systran.Models.Response

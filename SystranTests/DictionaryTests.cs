@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Apps.Systran.Actions;
-using Apps.Systran.Models.Request;
+﻿using Apps.Systran.Actions;
 using Apps.Systran.Models;
+using Apps.Systran.Models.Request;
 using SystranTests.Base;
 
 namespace Tests.Systran
@@ -62,8 +57,8 @@ namespace Tests.Systran
 
             // Assert
             Assert.IsNotNull(result, "Response is null.");
-            Assert.IsNotNull(result.File, "TBX file is null.");
-            Assert.IsFalse(string.IsNullOrEmpty(result.File.Name), "TBX file name is empty.");
+            Assert.IsNotNull(result.FileResponse, "TBX file is null.");
+            Assert.IsFalse(string.IsNullOrEmpty(result.FileResponse.Name), "TBX file name is empty.");
         }
 
         [TestMethod]

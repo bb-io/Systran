@@ -1,16 +1,8 @@
-﻿using Apps.Systran.Actions;
-using Apps.Systran.Models.Request;
-using Blackbird.Applications.Sdk.Common.Files;
-using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
-using RestSharp;
-using System.Net.Mime;
-using System.Net;
-using System.Text;
-using SystranTests.Base;
-using Moq;
-using Apps.Systran.Models.Response;
-using Apps.App.Actions;
+﻿using Apps.App.Actions;
+using Apps.Systran.Actions;
 using Apps.Systran.Models;
+using Apps.Systran.Models.Request;
+using SystranTests.Base;
 
 namespace SystranTests
 {
@@ -68,7 +60,7 @@ namespace SystranTests
 
             // Assert
             Assert.IsNotNull(result, "Response is null.");
-            Assert.IsNotNull(result.File, "Translated file is null.");
+            Assert.IsNotNull(result.FileResponse, "Translated file is null.");
         }
 
         [TestMethod]

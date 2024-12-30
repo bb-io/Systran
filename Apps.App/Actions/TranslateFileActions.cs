@@ -44,7 +44,7 @@ namespace Apps.Systran.Actions
     };
 
         [Action("Translate file", Description = "Translate a file from source language to target language")]
-        public async Task<TranslateFileResponse> TranslateFile([ActionParameter] TranslateLanguagesOptions options, [ActionParameter] TranslateFileRequest input)
+        public async Task<FileReferenceResponse> TranslateFile([ActionParameter] TranslateLanguagesOptions options, [ActionParameter] TranslateFileRequest input)
         {
 
             var inputType = input.Input.ContentType;
@@ -76,9 +76,9 @@ namespace Apps.Systran.Actions
          rawResponse.ContentType,
          $"{Path.GetFileNameWithoutExtension(input.Input.Name)}_translated{Path.GetExtension(input.Input.Name)}");
 
-            return new TranslateFileResponse
+            return new FileReferenceResponse
             {
-                File = translatedFile
+                FileResponse = translatedFile
             };
         }
 
@@ -112,7 +112,7 @@ namespace Apps.Systran.Actions
             request.AddFile("input", () => fileStream, input.Input.Name);
 
             var rawResponse = await Client.ExecuteWithErrorHandling<TranslateFileAsyncResponse>(request);
-           
+
             return new TranslateFileAsyncResponse
             {
                 RequestId = rawResponse.RequestId
@@ -121,7 +121,7 @@ namespace Apps.Systran.Actions
 
 
         [Action("Download translated file", Description = "Download a translated file by request ID")]
-        public async Task<DownloadFileResponse> DownloadTranslatedFile([ActionParameter] string requestId)
+        public async Task<FileReferenceResponse> DownloadTranslatedFile([ActionParameter] string requestId)
         {
             var statusRequest = new SystranRequest($"/translation/file/status", Method.Get);
             statusRequest.AddQueryParameter("requestId", requestId);
@@ -146,9 +146,9 @@ namespace Apps.Systran.Actions
                 rawResponse.ContentType,
                 $"{requestId}_translated_result");
 
-            return new DownloadFileResponse
+            return new FileReferenceResponse
             {
-                File = translatedFile
+                FileResponse = translatedFile
             };
         }
 

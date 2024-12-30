@@ -16,7 +16,7 @@ public class TranslateTextActions(InvocationContext invocationContext) : Systran
 {
 
     [Action("Translate text", Description = "Translate text")]
-    public async Task<TranslateTextResponse> TranslateText([ActionParameter] TranslateLanguagesOptions options, 
+    public async Task<TranslateTextResponse> TranslateText([ActionParameter] TranslateLanguagesOptions options,
         [ActionParameter] TranslateTextRequest input)
     {
         if (input.Input.Length > 50000 || GetInputSize(input.Input) > 50 * 1024 * 1024)

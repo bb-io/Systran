@@ -5,11 +5,6 @@ VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apps.Systran", "Apps.App\Apps.Systran.csproj", "{EB25604E-8EBA-464E-BEDF-30EA95395AD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{4A700043-C72D-4A1C-93B7-8FD89030EBF5}"
-	ProjectSection(ProjectDependencies) = postProject
-		{EB25604E-8EBA-464E-BEDF-30EA95395AD3} = {EB25604E-8EBA-464E-BEDF-30EA95395AD3}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Systran", "SystranTests\Tests.Systran.csproj", "{0EEEE9C9-A8D7-4A38-8416-C875E9CF0CFE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{EB25604E-8EBA-464E-BEDF-30EA95395AD3} = {EB25604E-8EBA-464E-BEDF-30EA95395AD3}
@@ -25,10 +20,6 @@ Global
 		{EB25604E-8EBA-464E-BEDF-30EA95395AD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB25604E-8EBA-464E-BEDF-30EA95395AD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB25604E-8EBA-464E-BEDF-30EA95395AD3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A700043-C72D-4A1C-93B7-8FD89030EBF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A700043-C72D-4A1C-93B7-8FD89030EBF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A700043-C72D-4A1C-93B7-8FD89030EBF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A700043-C72D-4A1C-93B7-8FD89030EBF5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0EEEE9C9-A8D7-4A38-8416-C875E9CF0CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0EEEE9C9-A8D7-4A38-8416-C875E9CF0CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EEEE9C9-A8D7-4A38-8416-C875E9CF0CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -10,7 +10,7 @@ public class SystranInvocable : BaseInvocable
     protected AuthenticationCredentialsProvider[] Creds =>
         InvocationContext.AuthenticationCredentialsProviders.ToArray();
 
-    protected SystranClient Client {  get; set; }
+    protected SystranClient Client { get; set; }
     public SystranInvocable(InvocationContext invocationContext) : base(invocationContext)
     {
         Client = new(Creds);

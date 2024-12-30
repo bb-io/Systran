@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Apps.App.Api;
+﻿using Apps.App.Api;
 using Apps.App.Invocables;
 using Apps.Systran.Models.Response;
 using Blackbird.Applications.Sdk.Common.Dynamic;
@@ -13,7 +8,7 @@ namespace Apps.Systran.DataSourceHandlers
 {
     public class DictionaryDataHandler : SystranInvocable, IAsyncDataSourceItemHandler
     {
-        public DictionaryDataHandler(InvocationContext invocationContext):base(invocationContext) { }
+        public DictionaryDataHandler(InvocationContext invocationContext) : base(invocationContext) { }
         public async Task<IEnumerable<DataSourceItem>> GetDataAsync(DataSourceContext context, CancellationToken cancellationToken)
         {
             var request = new SystranRequest("/resources/dictionary/list", RestSharp.Method.Post);

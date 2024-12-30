@@ -5,14 +5,13 @@ using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Utils.RestSharp;
 using Newtonsoft.Json;
 using RestSharp;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Apps.App.Api;
 
 public class SystranClient : BlackBirdRestClient
 {
-    public SystranClient(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders):
-        base(new RestSharp.RestClientOptions { BaseUrl = GetUri(authenticationCredentialsProviders)})
+    public SystranClient(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders) :
+        base(new RestSharp.RestClientOptions { BaseUrl = GetUri(authenticationCredentialsProviders) })
     {
         var apiKey = authenticationCredentialsProviders
              .First(x => x.KeyName == CredsNames.ApiKey).Value;
@@ -39,7 +38,7 @@ public class SystranClient : BlackBirdRestClient
 
     public override async Task<RestResponse> ExecuteWithErrorHandling(RestRequest request)
     {
-       
+
         var restResponse = await ExecuteAsync(request);
         if (!restResponse.IsSuccessStatusCode)
             throw ConfigureErrorException(restResponse);
