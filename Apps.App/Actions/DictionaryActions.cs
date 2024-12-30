@@ -18,6 +18,7 @@ using Blackbird.Applications.Sdk.Glossaries.Utils.Converters;
 using Blackbird.Applications.Sdk.Glossaries.Utils.Dtos;
 using Blackbird.Applications.Sdk.Glossaries.Utils.Dtos.Enums;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
+using DocumentFormat.OpenXml.Spreadsheet;
 using RestSharp;
 
 namespace Apps.Systran.Actions
@@ -108,20 +109,58 @@ namespace Apps.Systran.Actions
         }
 
 
+        [Action("Export dictionary", Description = "Export dictionary")]
+        public async Task<ExportDictionaryResponse> ExportDictionary([ActionParameter] ExportDictionaryRequest parameters)
+        {
+            var listEntriesRequest = new SystranRequest("/resources/dictionary/entry/list", Method.Post);
+            listEntriesRequest.AddQueryParameter("dictionaryId", parameters.DictionaryId);
+
+            var listEntriesResponse = await Client.ExecuteWithErrorHandling<ListEntriesResponse>(listEntriesRequest);
+
+            if (listEntriesResponse.Entries == null || !listEntriesResponse.Entries.Any())
+            {
+                throw new PluginApplicationException($"No entries found for dictionary ID: {parameters.DictionaryId}");
+            }
+
+            var conceptEntries = listEntriesResponse.Entries.Select(entry =>
+        new GlossaryConceptEntry(entry.SourceId, new List<GlossaryLanguageSection>
+        {
+            new GlossaryLanguageSection(entry.SourceLang, new List<GlossaryTermSection>
+            {
+                new GlossaryTermSection(entry.Source)
+                {
+                    PartOfSpeech = Enum.TryParse<PartOfSpeech>(entry.PartOfSpeech, true, out var sourcePos) ? sourcePos : null
+                }
+            }),
+            new GlossaryLanguageSection(entry.TargetLang, new List<GlossaryTermSection>
+            {
+                new GlossaryTermSection(entry.Target)
+                {
+                    PartOfSpeech = Enum.TryParse<PartOfSpeech>(entry.PartOfSpeech, true, out var targetPos) ? targetPos : null
+                }
+            })
+        })).ToList();
+
+            var glossary = new Glossary(conceptEntries)
+            {
+                Title = $"{parameters.DictionaryId}",
+                SourceDescription = $"Exported from dictionary ID: {parameters.DictionaryId}"
+            };
 
 
+            using var tbxStream = glossary.ConvertToTbx();
 
 
+            var fileReference = await fileManagementClient.UploadAsync(
+                tbxStream,
+                "application/x-tbx+xml",
+                $"{parameters.DictionaryId}.tbx");
 
-
-
-        //[Action("Export dictionary", Description = "Export dictionary")]
-        //public async Task<ExportDictionaryResponse> ExportDictionary([ActionParameter] ExportDictionaryRequest input)
-        //{
-            
-        //}
-
-
+            return new ExportDictionaryResponse
+            {
+                File = fileReference
+            };
+        }
     }
 }
 

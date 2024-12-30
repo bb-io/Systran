@@ -24,13 +24,14 @@ namespace Tests.Systran
                 Name = "Test Dictionary1230",
                 SourcePos = "noun",
                 Comment = "Test comment",
+                Type = "UD",
                 TbxFile = fileReference
             };
 
             var options = new TranslateLanguagesOptions
             {
                 Source = "en",
-                Target = "fr"
+                Target = "es"
             };
 
             var actions = new DictionaryActions(InvocationContext, FileManager);
@@ -43,5 +44,27 @@ namespace Tests.Systran
             Assert.IsNotNull(result.Added, "Added dictionary data is null.");
             Assert.IsFalse(string.IsNullOrEmpty(result.Added.Id), "Dictionary ID is missing.");
         }
+
+
+        [TestMethod]
+        public async Task ExportDictionaryToTbx_ValidDictionaryId_ReturnsTbxFile()
+        {
+            // Arrange
+            var parameters = new ExportDictionaryRequest
+            {
+                DictionaryId = "6772b971846d78419b053a8d",
+            };
+
+            var actions = new DictionaryActions(InvocationContext, FileManager);
+
+            // Act
+            var result = await actions.ExportDictionary(parameters);
+
+            // Assert
+            Assert.IsNotNull(result, "Response is null.");
+            Assert.IsNotNull(result.File, "TBX file is null.");
+            Assert.IsFalse(string.IsNullOrEmpty(result.File.Name), "TBX file name is empty.");
+        }
+
     }
 }
