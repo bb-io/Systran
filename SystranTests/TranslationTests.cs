@@ -4,7 +4,7 @@ using Apps.Systran.Models;
 using Apps.Systran.Models.Request;
 using SystranTests.Base;
 
-namespace SystranTests
+namespace Tests.Systran
 {
     [TestClass]
     public class TranslationTests : TestBase

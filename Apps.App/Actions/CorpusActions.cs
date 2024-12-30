@@ -14,7 +14,7 @@ namespace Apps.Systran.Actions
     [ActionList]
     public class CorpusActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : SystranInvocable(invocationContext)
     {
-        [Action("Export corpus", Description = "Export a corpus file by its ID")]
+        [Action("Export corpus", Description = "Export a corpus as TMX file by its ID")]
         public async Task<FileReferenceResponse> ExportCorpus([ActionParameter] ExportCorpusParameters parameters)
         {
             var request = new SystranRequest($"/resources/corpus/export", RestSharp.Method.Get);
@@ -22,7 +22,7 @@ namespace Apps.Systran.Actions
 
             var response = await Client.DownloadStreamAsync(request);
             if (response == null || !response.CanRead)
-                throw new PluginApplicationException("Failed to export corpus. Response stream is null or unreadable.");
+                throw new PluginApplicationException("Failed to export corpus. Response is null or file is empty.");
 
             var fileName = parameters.CorpusId.EndsWith(".tmx", StringComparison.OrdinalIgnoreCase)
                 ? parameters.CorpusId
@@ -45,7 +45,7 @@ namespace Apps.Systran.Actions
             }
         }
 
-        [Action("Import corpus from TMX file", Description = "Add a new corpus from an existing corpus.")]
+        [Action("Import corpus from TMX file", Description = "Add a new corpus from an TMX file")]
         public async Task<ImportCorpusResponse> ImportCorpus([ActionParameter] ImportCorpusParameters parameters)
         {
             if (parameters.InputFile == null)

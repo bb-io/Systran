@@ -5,12 +5,13 @@ using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Polling;
+using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using RestSharp;
 
 namespace Apps.Systran.Polling
 {
     [PollingEventList]
-    public class TranslationPollingList(InvocationContext invocationContext) : BaseActions(invocationContext, null!)
+    public class TranslationPollingList(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : BaseActions(invocationContext, fileManagementClient)
     {
 
         [PollingEvent("On translation finished", "Triggered when the translation status is finished")]
@@ -35,7 +36,8 @@ namespace Apps.Systran.Polling
             statusRequest.AddQueryParameter("requestId", requestId);
             var statusResponse = await Client.ExecuteAsync<TranslationStatusResponse>(statusRequest);
 
-            if (statusResponse.Data == null || statusResponse.Data.Status != "finished")
+            if (statusResponse.Data == null ||
+                !statusResponse.Data.Status.Equals("finished", StringComparison.OrdinalIgnoreCase))
             {
                 return new()
                 {
@@ -63,7 +65,7 @@ namespace Apps.Systran.Polling
             var translatedFile = await FileManagementClient.UploadAsync(
                new MemoryStream(rawResponse.RawBytes),
                rawResponse.ContentType,
-               $"{requestId}_translated_result");
+               $"{requestId}");
 
 
             return new()
