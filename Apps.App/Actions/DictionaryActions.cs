@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using Apps.App.Api;
 using Apps.App.Invocables;
+using Apps.Systran.Models;
 using Apps.Systran.Models.Request;
 using Apps.Systran.Models.Response;
 using Blackbird.Applications.Sdk.Common;
@@ -13,6 +15,8 @@ using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Files;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Glossaries.Utils.Converters;
+using Blackbird.Applications.Sdk.Glossaries.Utils.Dtos;
+using Blackbird.Applications.Sdk.Glossaries.Utils.Dtos.Enums;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using RestSharp;
 
@@ -22,8 +26,8 @@ namespace Apps.Systran.Actions
     public class DictionaryActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : SystranInvocable(invocationContext)
     {
         [Action("Create dictionary", Description = "Create a dictionary and populate it using a TBX file")]
-        public async Task CreateDictionary(
-            [ActionParameter] CreateDictionaryParameters parameters)
+        public async Task<CreateDictionaryResponse> CreateDictionary(
+            [ActionParameter] CreateDictionaryParameters parameters, [ActionParameter] TranslateLanguagesOptions options)
         {
 
             var createDictionaryRequest = new SystranRequest("/resources/dictionary/add", Method.Post);
@@ -32,9 +36,9 @@ namespace Apps.Systran.Actions
                 dictionary = new
                 {
                     name = parameters.Name,
-                    sourceLang = parameters.SourceLang,
+                    sourceLang = options.Source,
                     sourcePos = parameters.SourcePos,
-                    targetLangs = parameters.TargetLangs,
+                    targetLangs = options.Target,
                     type = parameters.Type,
                     comments = parameters.Comment ?? "Created via API and populated using a TBX file"
                 }
@@ -42,16 +46,13 @@ namespace Apps.Systran.Actions
 
             var createResponse = await Client.ExecuteWithErrorHandling<CreateDictionaryResponse>(createDictionaryRequest);
 
-            if (createResponse.Error != null)
-                throw new PluginApplicationException($"Failed to create dictionary: {createResponse.Error.Message}");
-
             var dictionaryId = createResponse.Added.Id;
 
-            var systranFormattedContent = await ConvertTbxToSystranFormat(parameters.TbxFile, parameters.SourceLang, parameters.TargetLangs);
+            var systranFormattedContent = await ConvertTbxToSystranFormat(parameters.TbxFile, options.Source, options.Target);
 
             var importEntriesRequest = new SystranRequest("/resources/dictionary/entry/import", Method.Post);
             importEntriesRequest.AddQueryParameter("dictionaryId", dictionaryId);
-            importEntriesRequest.AddQueryParameter("sourceLang", parameters.SourceLang);
+            importEntriesRequest.AddQueryParameter("sourceLang", options.Source);
 
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(systranFormattedContent)))
             {
@@ -65,7 +66,9 @@ namespace Apps.Systran.Actions
             var importResponse = await Client.ExecuteWithErrorHandling<ImportResponse>(importEntriesRequest);
 
             if (importResponse.Error != null)
-                throw new Exception($"Failed to import entries: {importResponse.Error.Message}");
+                throw new PluginApplicationException($"Failed to import entries: {importResponse.Error.Message}");
+
+            return createResponse;
 
         }
 
@@ -103,6 +106,22 @@ namespace Apps.Systran.Actions
 
             return tsvContent;
         }
+
+
+
+
+
+
+
+
+
+        //[Action("Export dictionary", Description = "Export dictionary")]
+        //public async Task<ExportDictionaryResponse> ExportDictionary([ActionParameter] ExportDictionaryRequest input)
+        //{
+            
+        //}
+
+
     }
 }
 

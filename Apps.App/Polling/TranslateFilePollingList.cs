@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Apps.App.Api;
-using Apps.App.Invocables;
+﻿using Apps.App.Api;
 using Apps.Systran.Actions.Base;
-using Apps.Systran.Dto;
 using Apps.Systran.Polling.Models;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Polling;
-using Blackbird.Applications.Sdk.Common.Webhooks;
-using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using RestSharp;
 
 namespace Apps.Systran.Polling

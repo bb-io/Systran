@@ -28,7 +28,7 @@ namespace SystranTests.Base
                 AuthenticationCredentialsProviders = Creds,
             };
 
-            FileManager = new FileManager(folderLocation);
+            FileManager = new FileManager();
         }
     }
 }

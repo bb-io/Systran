@@ -15,22 +15,17 @@ namespace Apps.Systran.Models.Request
         [Display("Dictionary name")]
         public string Name { get; set; }
 
-        [Display("Source language")]
-        [StaticDataSource(typeof(LanguageCodeDataHandler))]
-        public string SourceLang { get; set; }
-
         [Display("Source pos")]
         [StaticDataSource(typeof(SourcePosDataHandler))]
-        public string SourcePos { get; set; }
-
-        [Display("Target language")]
-        [StaticDataSource(typeof(LanguageCodeDataHandler))]
-        public string TargetLangs { get; set; }
+        public string? SourcePos { get; set; }
 
         [Display("Dictionary type")]
         [StaticDataSource(typeof(DictionaryTypeDataHandler))]
         public string Type { get; set; }
+
+        [Display("Dictionary description")]
         public string? Comment { get; set; }
+        [Display("File")]
         public FileReference TbxFile { get; set; }
     }
 }

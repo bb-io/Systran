@@ -44,76 +44,10 @@ namespace SystranTests
 
 
         [TestMethod]
-        public async Task ImportCorpus_ValidFile_ReturnsResponse()
-        {
-            // Arrange
-            var projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
-            var testFilePath = Path.Combine(projectDirectory, "TestFiles", "test.tmx");
-
-            Assert.IsTrue(File.Exists(testFilePath), $"Test file not found at: {testFilePath}");
-
-            using var fileStream = new FileStream(testFilePath, FileMode.Open, FileAccess.Read);
-            var fileReference = await FileManager.UploadAsync(
-                fileStream,
-                "application/x-tmx+xml",
-                "test.tmx"
-            );
-
-            var parameters = new ImportCorpusParameters
-            {
-                Name = "Test Corpus",
-                InputFile = fileReference,
-                Tag = new[] { "tag1", "tag2" }
-            };
-
-            var actions = new CorpusActions(InvocationContext, FileManager);
-
-
-            // Act
-            var result = await actions.ImportCorpus(parameters);
-
-            // Assert
-            Assert.IsNotNull(result, "Response is null.");
-            Assert.IsNotNull(result.Corpus, "Corpus data is null.");
-            Assert.IsFalse(string.IsNullOrEmpty(result.Corpus.Id), "Corpus ID is missing.");
-
-        }
-
-        [TestMethod]
-        public async Task ExportCorpus_ValidCorpusId_ReturnsFileReference()
-        {
-            var corpusId = "677142345f6f31e36a0192a3";
-            var expectedContentType = "application/x-tmx+xml";
-
-            var parameters = new ExportCorpusParameters
-            {
-                CorpusId = corpusId
-            };
-
-            var actions = new CorpusActions(InvocationContext, FileManager);
-
-            var result = await actions.ExportCorpus(parameters);
-
-            Assert.IsNotNull(result, "Response is null.");
-            Assert.IsNotNull(result.FileResponse, "FileResponse is null.");
-        }
-
-
-        [TestMethod]
         public async Task TranslateFile_ValidFile_ReturnsResponse()
         {
             // Arrange
-            var projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
-            var testFilePath = Path.Combine(projectDirectory, "TestFiles", "Translate.txt");
-
-            Assert.IsTrue(File.Exists(testFilePath), $"Test file not found at: {testFilePath}");
-
-            using var fileStream = new FileStream(testFilePath, FileMode.Open, FileAccess.Read);
-            var fileReference = await FileManager.UploadAsync(
-                fileStream,
-                "text/plain",
-                "Translate_output.txt"
-            );
+            var fileReference = await FileManager.UploadTestFileAsync("Translate.txt");
 
             var inputRequest = new TranslateFileRequest
             {
@@ -141,18 +75,7 @@ namespace SystranTests
         public async Task TranslateFileAsync_ValidInput_ReturnsRequestId()
         {
             // Arrange
-            var projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
-            var testFilePath = Path.Combine(projectDirectory, "TestFiles", "Translate.txt");
-
-            Assert.IsTrue(File.Exists(testFilePath), $"Test file not found at: {testFilePath}");
-
-            using var fileStream = new FileStream(testFilePath, FileMode.Open, FileAccess.Read);
-
-            var fileReference = await FileManager.UploadAsync(
-                fileStream,
-                "text/plain",
-                "Translate_output.txt"
-            );
+            var fileReference = await FileManager.UploadTestFileAsync("Translate.txt");
 
             var inputRequest = new TranslateFileRequest
             {

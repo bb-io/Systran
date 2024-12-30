@@ -3,6 +3,7 @@ using Apps.App.Invocables;
 using Apps.Systran.Models;
 using Apps.Systran.Models.Request;
 using Apps.Systran.Models.Response;
+using Apps.Systran.Polling.Models;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Exceptions;
@@ -83,7 +84,7 @@ namespace Apps.Systran.Actions
 
 
 
-        [Action("Translate file(Batch)", Description = "Translate a file from source language to target language")]
+        [Action("Translate file(Async)", Description = "Translate a file from source language to target language")]
         public async Task<TranslateFileAsyncResponse> TranslateFileAsync([ActionParameter] TranslateLanguagesOptions options, [ActionParameter] TranslateFileRequest input)
         {
 
@@ -117,6 +118,40 @@ namespace Apps.Systran.Actions
                 RequestId = rawResponse.RequestId
             };
         }
+
+
+        [Action("Download translated file", Description = "Download a translated file by request ID")]
+        public async Task<DownloadFileResponse> DownloadTranslatedFile([ActionParameter] string requestId)
+        {
+            var statusRequest = new SystranRequest($"/translation/file/status", Method.Get);
+            statusRequest.AddQueryParameter("requestId", requestId);
+            var statusResponse = await Client.ExecuteAsync<TranslationStatusResponse>(statusRequest);
+
+            if (statusResponse.Data == null || statusResponse.Data.Status != "finished")
+            {
+                throw new PluginApplicationException("Translation is not finished yet or request ID is invalid.");
+            }
+
+            var resultRequest = new SystranRequest($"/translation/file/result", Method.Get);
+            resultRequest.AddQueryParameter("requestId", requestId);
+            var rawResponse = await Client.ExecuteAsync(resultRequest);
+
+            if (!rawResponse.IsSuccessful || rawResponse.RawBytes == null)
+            {
+                throw new PluginApplicationException($"Failed to retrieve the translation result. Status: {rawResponse.StatusCode}, Error: {rawResponse.ErrorMessage}");
+            }
+
+            var translatedFile = await fileManagementClient.UploadAsync(
+                new MemoryStream(rawResponse.RawBytes),
+                rawResponse.ContentType,
+                $"{requestId}_translated_result");
+
+            return new DownloadFileResponse
+            {
+                File = translatedFile
+            };
+        }
+
     }
 }
 
