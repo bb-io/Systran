@@ -137,5 +137,43 @@ namespace SystranTests
             Assert.IsNotNull(result.File, "Translated file is null.");
         }
 
+        [TestMethod]
+        public async Task TranslateFileAsync_ValidInput_ReturnsRequestId()
+        {
+            // Arrange
+            var projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
+            var testFilePath = Path.Combine(projectDirectory, "TestFiles", "Translate.txt");
+
+            Assert.IsTrue(File.Exists(testFilePath), $"Test file not found at: {testFilePath}");
+
+            using var fileStream = new FileStream(testFilePath, FileMode.Open, FileAccess.Read);
+
+            var fileReference = await FileManager.UploadAsync(
+                fileStream,
+                "text/plain",
+                "Translate_output.txt"
+            );
+
+            var inputRequest = new TranslateFileRequest
+            {
+                Input = fileReference,
+                Profile = null
+            };
+
+            var inputOptions = new TranslateLanguagesOptions
+            {
+                Source = "en",
+                Target = "fr"
+            };
+
+            var actions = new TranslateFileActions(InvocationContext, FileManager);
+            // Act
+            var result = await actions.TranslateFileAsync(inputOptions, inputRequest);
+
+            // Assert
+            Assert.IsNotNull(result, "Response is null.");
+            Assert.IsFalse(string.IsNullOrEmpty(result.RequestId), "Request ID is empty or null.");
+        }
+
     }
 }
