@@ -44,7 +44,7 @@ Before you can connect you need to make sure that:
 - **Translate file (Async)** Translate a file from source language to target language
 - **Download translated file** Download a translated file by request ID
 
-###Text
+### Text
 
 - **Translate text** Translate text
 
