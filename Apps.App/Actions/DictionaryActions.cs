@@ -109,7 +109,7 @@ namespace Apps.Systran.Actions
         }
 
 
-        [Action("Export dictionary", Description = "Export dictionary")]
+        [Action("Export dictionary", Description = "Export dictionary as TBX file")]
         public async Task<ExportDictionaryResponse> ExportDictionary([ActionParameter] ExportDictionaryRequest parameters)
         {
             var listEntriesRequest = new SystranRequest("/resources/dictionary/entry/list", Method.Post);
@@ -123,17 +123,17 @@ namespace Apps.Systran.Actions
             }
 
             var conceptEntries = listEntriesResponse.Entries.Select(entry =>
-        new GlossaryConceptEntry(entry.SourceId, new List<GlossaryLanguageSection>
-        {
-            new GlossaryLanguageSection(entry.SourceLang, new List<GlossaryTermSection>
-            {
-                new GlossaryTermSection(entry.Source)
-                {
-                    PartOfSpeech = Enum.TryParse<PartOfSpeech>(entry.PartOfSpeech, true, out var sourcePos) ? sourcePos : null
-                }
+                 new GlossaryConceptEntry(entry.SourceId, new List<GlossaryLanguageSection>
+                 {
+                    new GlossaryLanguageSection(entry.SourceLang, new List<GlossaryTermSection>
+                    {
+                        new GlossaryTermSection(entry.Source)
+                        {
+                            PartOfSpeech = Enum.TryParse<PartOfSpeech>(entry.PartOfSpeech, true, out var sourcePos) ? sourcePos : null
+                        }
             }),
-            new GlossaryLanguageSection(entry.TargetLang, new List<GlossaryTermSection>
-            {
+                new GlossaryLanguageSection(entry.TargetLang, new List<GlossaryTermSection>
+                {
                 new GlossaryTermSection(entry.Target)
                 {
                     PartOfSpeech = Enum.TryParse<PartOfSpeech>(entry.PartOfSpeech, true, out var targetPos) ? targetPos : null
@@ -159,6 +159,42 @@ namespace Apps.Systran.Actions
             return new ExportDictionaryResponse
             {
                 File = fileReference
+            };
+        }
+
+        [Action("Update dictionary from TBX file", Description = "Update an existing dictionary by importing entries from a TBX file")]
+        public async Task<UpdateDictionaryResponse> UpdateDictionary(
+    [ActionParameter] UpdateDictionaryRequest parameters,
+    [ActionParameter] TranslateLanguagesOptions options)
+        {
+            var systranFormattedContent = await ConvertTbxToSystranFormat(parameters.File, options.Source, options.Target);
+
+            var importEntriesRequest = new SystranRequest("/resources/dictionary/entry/import", Method.Post);
+            importEntriesRequest.AddQueryParameter("dictionaryId", parameters.DictionaryId);
+            importEntriesRequest.AddQueryParameter("sourceLang", options.Source);
+
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(systranFormattedContent)))
+            {
+                stream.Position = 0;
+                importEntriesRequest.AddFile(
+                    "inputFile",
+                    stream.ToArray(),
+                    "ConvertedDictionary.tsv",
+                    "text/plain"
+                );
+            }
+
+            var importResponse = await Client.ExecuteWithErrorHandling<ImportResponse>(importEntriesRequest);
+
+            if (importResponse.Error != null)
+            {
+                throw new PluginApplicationException($"Failed to import entries: {importResponse.Error.Message}");
+            }
+
+            return new UpdateDictionaryResponse
+            {
+                Success = true,
+                Message = $"Successfully updated dictionary ID: {parameters.DictionaryId}"
             };
         }
     }

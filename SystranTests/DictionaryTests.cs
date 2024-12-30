@@ -66,5 +66,31 @@ namespace Tests.Systran
             Assert.IsFalse(string.IsNullOrEmpty(result.File.Name), "TBX file name is empty.");
         }
 
+        [TestMethod]
+        public async Task UpdateDictionary_ValidTbxFile_UpdatesDictionary()
+        {
+            // Arrange
+            var parameters = new UpdateDictionaryRequest
+            {
+                DictionaryId = "6772b971846d78419b053a8d",
+                File = await FileManager.UploadTestFileAsync("test.tbx", "application/x-tbx+xml")
+            };
+
+            var options = new TranslateLanguagesOptions
+            {
+                Source = "en",
+                Target = "es"
+            };
+
+            var actions = new DictionaryActions(InvocationContext, FileManager);
+
+            // Act
+            var result = await actions.UpdateDictionary(parameters, options);
+
+            // Assert
+            Assert.IsNotNull(result, "Response is null.");
+            Assert.IsTrue(result.Success, "Update operation failed.");
+            Assert.IsFalse(string.IsNullOrEmpty(result.Message), "Response message is empty.");
+        }
     }
 }
