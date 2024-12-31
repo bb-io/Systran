@@ -21,7 +21,7 @@ namespace Tests.Systran
 
             var inputRequest = new TranslateTextRequest
             {
-                Input = "daughter",
+                Input = "YOUR_INPUT_TEXT",
                 WithInfo = true
             };
 

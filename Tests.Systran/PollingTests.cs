@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Apps.Systran.Models.Request;
+﻿using Apps.Systran.Actions;
 using Apps.Systran.Models;
-using Apps.Systran.Polling.Models;
+using Apps.Systran.Models.Request;
 using Apps.Systran.Polling;
-using Blackbird.Applications.Sdk.Common.Invocation;
+using Apps.Systran.Polling.Models;
 using Blackbird.Applications.Sdk.Common.Polling;
 using SystranTests.Base;
-using Apps.Systran.Actions;
 
 namespace Tests.Systran
 {
@@ -60,7 +54,7 @@ namespace Tests.Systran
 
                 pollingResponse = await actions.OnTranslationFinished(pollingRequest, requestId);
 
-                if (pollingResponse.FlyBird) 
+                if (pollingResponse.FlyBird)
                 {
                     break;
                 }

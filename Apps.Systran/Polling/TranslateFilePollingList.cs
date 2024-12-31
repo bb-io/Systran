@@ -51,7 +51,7 @@ namespace Apps.Systran.Polling
             }
 
 
-            var resultRequest = new SystranRequest($"/translation/file/result", Method.Get); ;
+            var resultRequest = new SystranRequest($"/translation/file/result", Method.Get);
             resultRequest.AddQueryParameter("requestId", requestId);
             var resultResponse = await Client.ExecuteAsync<TranslationResultResponse>(resultRequest);
 

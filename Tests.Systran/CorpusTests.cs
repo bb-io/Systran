@@ -16,7 +16,7 @@ namespace Tests.Systran
 
             var parameters = new ImportCorpusParameters
             {
-                Name = "Test Corpus111232",
+                Name = "YOUR_CORPUS_NAME",
                 InputFile = fileReference,
                 Tag = new[] { "tag1", "tag2" }
             };
@@ -37,7 +37,7 @@ namespace Tests.Systran
         [TestMethod]
         public async Task ExportCorpus_ValidCorpusId_ReturnsFileReference()
         {
-            var corpusId = "677142345f6f31e36a0192a3";
+            var corpusId = "YOUR_CORPUS_ID";
             var expectedContentType = "application/x-tmx+xml";
 
             var parameters = new ExportCorpusParameters
