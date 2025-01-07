@@ -2,7 +2,7 @@
 using Blackbird.Applications.Sdk.Common.Dynamic;
 using SystranTests.Base;
 
-namespace SystranTests
+namespace Tests.Systran
 {
     [TestClass]
     public class DataSources : TestBase

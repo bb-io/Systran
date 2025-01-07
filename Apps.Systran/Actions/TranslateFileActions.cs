@@ -156,7 +156,7 @@ namespace Apps.Systran.Actions
             var translatedFile = await _fileManagementClient.UploadAsync(
                 new MemoryStream(rawResponse.RawBytes),
                 rawResponse.ContentType,
-                $"{requestId}_translated_result");
+                $"{requestId}");
 
             return new FileReferenceResponse { FileResponse = translatedFile };
         }

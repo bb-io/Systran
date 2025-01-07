@@ -4,7 +4,7 @@ using Apps.Systran.Models;
 using Apps.Systran.Models.Request;
 using SystranTests.Base;
 
-namespace SystranTests
+namespace Tests.Systran
 {
     [TestClass]
     public class TranslationTests : TestBase
@@ -21,7 +21,7 @@ namespace SystranTests
 
             var inputRequest = new TranslateTextRequest
             {
-                Input = "daughter",
+                Input = "YOUR_INPUT_TEXT",
                 WithInfo = true
             };
 

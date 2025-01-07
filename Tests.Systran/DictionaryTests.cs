@@ -16,7 +16,7 @@ namespace Tests.Systran
 
             var parameters = new CreateDictionaryParameters
             {
-                Name = "Test Dictionary1230",
+                Name = "YOUR_DICTIONARY_NAME",
                 SourcePos = "noun",
                 Comment = "Test comment",
                 Type = "UD",
@@ -47,7 +47,7 @@ namespace Tests.Systran
             // Arrange
             var parameters = new ExportDictionaryRequest
             {
-                DictionaryId = "6772b971846d78419b053a8d",
+                DictionaryId = "YOUR_DICTIONARY_ID",
             };
 
             var actions = new DictionaryActions(InvocationContext, FileManager);
@@ -67,7 +67,7 @@ namespace Tests.Systran
             // Arrange
             var parameters = new UpdateDictionaryRequest
             {
-                DictionaryId = "6772b971846d78419b053a8d",
+                DictionaryId = "YOUR_DICTIONARY_ID",
                 File = await FileManager.UploadTestFileAsync("test.tbx", "application/x-tbx+xml")
             };
 
