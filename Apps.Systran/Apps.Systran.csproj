@@ -1,23 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <Product>Systran [Beta]</Product>
-        <Description>SYSTRAN Translate API is built around a RESTful API and can be used in all types of applications.This API Reference is intended for developers who want to write applications that can interact with the SYSTRAN Translate API. You can integrate our translation technology directly in your internal or external applications to make them multilingual or translate texts and files by using the SYSTRAN Translate API.</Description>
-        <Version>1.0.1</Version>
-        <AssemblyName>Apps.Systran</AssemblyName>
-    </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Product>Systran [Beta]</Product>
+		<Description>SYSTRAN Translate API is built around a RESTful API and can be used in all types of applications.This API Reference is intended for developers who want to write applications that can interact with the SYSTRAN Translate API. You can integrate our translation technology directly in your internal or external applications to make them multilingual or translate texts and files by using the SYSTRAN Translate API.</Description>
+		<Version>1.0.2</Version>
 
-    <ItemGroup>
-        <PackageReference Include="Blackbird.Applications.Sdk.Common" Version="2.11.0" />
-        <PackageReference Include="Blackbird.Applications.Sdk.Glossaries.Utils" Version="1.0.1" />
-        <PackageReference Include="Blackbird.Applications.Sdk.Utils" Version="1.0.26" />
-    </ItemGroup>
+		<AssemblyName>Apps.Systran</AssemblyName>
+	</PropertyGroup>
 
-    <ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Blackbird.Applications.Sdk.Common" Version="2.11.0" />
+		<PackageReference Include="Blackbird.Applications.Sdk.Glossaries.Utils" Version="1.0.1" />
+		<PackageReference Include="Blackbird.Applications.Sdk.Utils" Version="1.0.26" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<EmbeddedResource CopyToOutputDirectory="Always" Include="image\icon.png"></EmbeddedResource>
-    </ItemGroup>
+	</ItemGroup>
 
 </Project>
