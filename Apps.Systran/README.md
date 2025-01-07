@@ -34,15 +34,10 @@ Before you can connect you need to make sure that:
 
 ### Dictionary
 
-<<<<<<< HEAD
 - **Create dictionary** Generate a dictionary and populate it from a `.tbx` file
 - **Export dictionary** Export dictionary as `.tbx` file
 - **Update dictionary from TBX file** Import entries from a `.tbx` file to update an existing dictionary.
-=======
-- **Create dictionary** Create a dictionary and populate it using a `.tbx` file
-- **Export dictionary** Export dictionary as TBX file
-- **Update dictionary from TBX file** Update an existing dictionary by importing entries from a `.tbx` file
->>>>>>> main
+
 
 ### File
 
