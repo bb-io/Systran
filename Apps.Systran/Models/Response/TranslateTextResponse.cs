@@ -7,7 +7,7 @@ namespace Apps.Systran.Models.Response
         [Display("Request ID")]
         public string RequestId { get; set; } = string.Empty;
 
-        [Display("Outputs")]
+        [DefinitionIgnore]
         public List<TranslationOutput> Outputs { get; set; } = new();
     }
 
