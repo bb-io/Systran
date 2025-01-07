@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Apps.Systran", "Apps.Systran\Apps.Systran.csproj", "{EB25604E-8EBA-464E-BEDF-30EA95395AD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Systran", "Tests.Systran\Tests.Systran.csproj", "{0EEEE9C9-A8D7-4A38-8416-C875E9CF0CFE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EB25604E-8EBA-464E-BEDF-30EA95395AD3} = {EB25604E-8EBA-464E-BEDF-30EA95395AD3}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB25604E-8EBA-464E-BEDF-30EA95395AD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB25604E-8EBA-464E-BEDF-30EA95395AD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB25604E-8EBA-464E-BEDF-30EA95395AD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB25604E-8EBA-464E-BEDF-30EA95395AD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EEEE9C9-A8D7-4A38-8416-C875E9CF0CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EEEE9C9-A8D7-4A38-8416-C875E9CF0CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EEEE9C9-A8D7-4A38-8416-C875E9CF0CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EEEE9C9-A8D7-4A38-8416-C875E9CF0CFE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
