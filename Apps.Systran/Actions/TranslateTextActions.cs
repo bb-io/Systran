@@ -45,7 +45,12 @@ public class TranslateTextActions(InvocationContext invocationContext) : Systran
         if (input.BackTranslation.HasValue)
             request.AddQueryParameter("backTranslation", input.BackTranslation.Value.ToString().ToLower());
 
-        var response = await Client.ExecuteWithErrorHandling<TranslateTextResponse>(request);
+        var systranResponse = await Client.ExecuteWithErrorHandling<TranslateText>(request);
+
+        var response = new TranslateTextResponse
+        {
+            Output = systranResponse.Outputs.FirstOrDefault()?.Output ?? string.Empty
+        };
         return response;
     }
 
