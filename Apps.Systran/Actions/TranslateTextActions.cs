@@ -49,12 +49,7 @@ public class TranslateTextActions(InvocationContext invocationContext) : Systran
 
         var response = new TranslateTextResponse
         {
-            Output= systranResponse.Outputs
-            .Select(o => new TranslationOutputResponse
-            {
-                Output = o.Output
-            })
-            .ToList()
+            Output = systranResponse.Outputs.FirstOrDefault()?.Output ?? string.Empty
         };
         return response;
     }
