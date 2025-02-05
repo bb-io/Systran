@@ -91,7 +91,7 @@ namespace Apps.Systran.Actions
                 throw new PluginMisconfigurationException("We couldn't find the main section in your file. Please make sure the file is complete and try again.");
 
             if (!string.Equals(root.Name.LocalName, "tbx", StringComparison.OrdinalIgnoreCase))
-                throw new PluginMisconfigurationException($"The file should start with a <tbx> section, but we found something else instead. Please double-check the file format");
+                throw new PluginMisconfigurationException($"The file should start with a <tbx> section. Please double-check the file format");
 
             var typeAttr = root.Attribute("type")?.Value;
             if (!string.Equals(typeAttr, "TBX-Core", StringComparison.OrdinalIgnoreCase))
