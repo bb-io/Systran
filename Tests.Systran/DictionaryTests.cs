@@ -12,7 +12,7 @@ namespace Tests.Systran
         public async Task CreateDictionary_ValidFile_ReturnsResponse()
         {
             // Arrange
-            var fileReference = await FileManager.UploadTestFileAsync("english_to_french.tbx");
+            var fileReference = await FileManager.UploadTestFileAsync("test.tbx");
 
             var parameters = new CreateDictionaryParameters
             {
