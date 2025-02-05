@@ -55,7 +55,7 @@ namespace Apps.Systran.Actions
                 importEntriesRequest.AddFile("inputFile",
                     stream.ToArray(),
                     "ConvertedDictionary.tsv",
-                    "text/plain");
+                    "text/xml");
             }
 
             var importResponse = await Client.ExecuteWithErrorHandling<ImportResponse>(importEntriesRequest);

@@ -30,7 +30,7 @@ public class SystranClient : BlackBirdRestClient
 
         if (errors != null && !string.IsNullOrEmpty(errors.Message))
         {
-            return new($"Systran API Error: {errors.Message}");
+            throw new PluginApplicationException($"Systran API Error: {errors.Message}");
         }
 
         return new("Unknown error");
