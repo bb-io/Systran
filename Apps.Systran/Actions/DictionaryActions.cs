@@ -77,14 +77,7 @@ namespace Apps.Systran.Actions
             memoryStream.Position = 0;
 
             XDocument xDoc;
-            try
-            {
-                xDoc = XDocument.Load(memoryStream);
-            }
-            catch (Exception e)
-            {
-                throw new PluginApplicationException($"Error reading XML file : {e.Message}");
-            }
+            xDoc = XDocument.Load(memoryStream);
 
             var root = xDoc.Root;
             if (root == null)
