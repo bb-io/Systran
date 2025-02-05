@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Xml.Linq;
 using Apps.App.Api;
 using Apps.App.Invocables;
 using Apps.Systran.Models;
@@ -55,7 +56,7 @@ namespace Apps.Systran.Actions
                 importEntriesRequest.AddFile("inputFile",
                     stream.ToArray(),
                     "ConvertedDictionary.tsv",
-                    "text/xml");
+                    "text/plain");
             }
 
             var importResponse = await Client.ExecuteWithErrorHandling<ImportResponse>(importEntriesRequest);
@@ -68,6 +69,39 @@ namespace Apps.Systran.Actions
 
         private async Task<string> ConvertTbxToSystranFormat(FileReference tbxFile, string sourceLang, string targetLang)
         {
+            await using var originalStream = await fileManagementClient.DownloadAsync(tbxFile);
+
+            var memoryStream = new MemoryStream();
+            await originalStream.CopyToAsync(memoryStream);
+
+            memoryStream.Position = 0;
+
+            XDocument xDoc;
+            try
+            {
+                xDoc = XDocument.Load(memoryStream);
+            }
+            catch (Exception e)
+            {
+                throw new PluginApplicationException($"Error reading XML file : {e.Message}");
+            }
+
+            var root = xDoc.Root;
+            if (root == null)
+                throw new PluginMisconfigurationException("We couldn't find the main section in your file. Please make sure the file is complete and try again.");
+
+            if (!string.Equals(root.Name.LocalName, "tbx", StringComparison.OrdinalIgnoreCase))
+                throw new PluginMisconfigurationException($"The file should start with a <tbx> section, but we found something else instead. Please double-check the file format");
+
+            var typeAttr = root.Attribute("type")?.Value;
+            if (!string.Equals(typeAttr, "TBX-Core", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new PluginMisconfigurationException(
+                    $"The file is missing or has an incorrect type='TBX-Core' setting in its main section. Please verify the file structure and try again.");
+            }
+
+            memoryStream.Position = 0;
+
             await using var tbxStream = await fileManagementClient.DownloadAsync(tbxFile);
             var blackbirdGlossary = await tbxStream.ConvertFromTbx();
 
