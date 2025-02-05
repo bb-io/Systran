@@ -26,11 +26,6 @@ public class SystranClient : BlackBirdRestClient
 
     protected override Exception ConfigureErrorException(RestResponse response)
     {
-        if (response.Content is null)
-        {
-            return new PluginApplicationException($"Error: {response.ErrorMessage}");
-        }
-
         var errors = JsonConvert.DeserializeObject<SystranError>(response.Content!)!;
 
         if (errors != null && !string.IsNullOrEmpty(errors.Message))
