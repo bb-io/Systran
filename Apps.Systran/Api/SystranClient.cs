@@ -30,10 +30,10 @@ public class SystranClient : BlackBirdRestClient
 
         if (errors != null && !string.IsNullOrEmpty(errors.Message))
         {
-            return new($"Systran API Error: {errors.Message}");
+            throw new PluginApplicationException($"Systran API Error: {response.ErrorMessage}");
         }
 
-        return new("Unknown error");
+        return new PluginApplicationException($"Error: {response.StatusCode}, {response.Content} {errors.Message}");
     }
 
     public override async Task<RestResponse> ExecuteWithErrorHandling(RestRequest request)
