@@ -25,7 +25,7 @@ namespace Tests.Systran
 
             var options = new TranslateLanguagesOptions
             {
-                Source = "en",
+                Source = "en-",
                 Target = "es"
             };
 

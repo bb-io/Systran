@@ -38,7 +38,7 @@ public class SystranClient : BlackBirdRestClient
             throw new PluginApplicationException($"Systran API Error: {response.ErrorMessage}");
         }
 
-        return new PluginApplicationException($"Error: {errors.Message}");
+        return new PluginApplicationException($"Error: {response.StatusCode}, {response.Content} {errors.Message}");
     }
 
     public override async Task<RestResponse> ExecuteWithErrorHandling(RestRequest request)
