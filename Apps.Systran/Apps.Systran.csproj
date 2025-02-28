@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<Product>SYSTRAN [Beta]</Product>
 		<Description>SYSTRAN Translate API is built around a RESTful API and can be used in all types of applications.This API Reference is intended for developers who want to write applications that can interact with the SYSTRAN Translate API. You can integrate our translation technology directly in your internal or external applications to make them multilingual or translate texts and files by using the SYSTRAN Translate API.</Description>
-		<Version>1.0.6</Version>
+		<Version>1.0.7</Version>
 
 		<AssemblyName>Apps.Systran</AssemblyName>
 	</PropertyGroup>

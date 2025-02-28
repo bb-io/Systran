@@ -21,7 +21,7 @@ namespace Apps.Systran.Actions
     [ActionList]
     public class DictionaryActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : SystranInvocable(invocationContext)
     {
-        [Action("Create dictionary", Description = "Create a dictionary and populate it using a TBX file")]
+        [Action("Create dictionary", Description = "Create a dictionary and populate it using a TBX or TSV(SYSTRAN standart) file")]
         public async Task<CreateDictionaryResponse> CreateDictionary(
             [ActionParameter] CreateDictionaryParameters parameters,
             [ActionParameter] TranslateLanguagesOptions options)
@@ -44,7 +44,37 @@ namespace Apps.Systran.Actions
 
             var dictionaryId = createResponse.Added.Id;
 
-            var systranFormattedContent = await ConvertTbxToSystranFormat(parameters.TbxFile, options.Source, options.Target);
+            string systranFormattedContent;
+            await using var originalStream = await fileManagementClient.DownloadAsync(parameters.TbxFile);
+            using var memoryStream = new MemoryStream();
+            await originalStream.CopyToAsync(memoryStream);
+
+            bool isTbx = false;
+            memoryStream.Position = 0;
+            try
+            {
+                var xDoc = XDocument.Load(memoryStream);
+                var root = xDoc.Root;
+                if (root != null && string.Equals(root.Name.LocalName, "tbx", StringComparison.OrdinalIgnoreCase))
+                {
+                    isTbx = true;
+                }
+            }
+            catch
+            {
+                isTbx = false;
+            }
+
+            if (isTbx)
+            {
+                systranFormattedContent = await ConvertTbxToSystranFormat(parameters.TbxFile, options.Source, options.Target);
+            }
+            else
+            {
+                memoryStream.Position = 0;
+                using var reader = new StreamReader(memoryStream);
+                systranFormattedContent = await reader.ReadToEndAsync();
+            }
 
             var importEntriesRequest = new SystranRequest("/resources/dictionary/entry/import", Method.Post);
             importEntriesRequest.AddQueryParameter("dictionaryId", dictionaryId);
@@ -60,7 +90,6 @@ namespace Apps.Systran.Actions
             }
 
             var importResponse = await Client.ExecuteWithErrorHandling<ImportResponse>(importEntriesRequest);
-
             if (importResponse.Error != null)
                 throw new PluginApplicationException($"Failed to import entries: {importResponse.Error.Message}");
 

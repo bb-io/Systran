@@ -1,0 +1,27 @@
+#ENCODING=UTF-8
+#SUMMARY=Patricia_UD_ENFR
+#DESCRIPTION=Patricia_UD_ENFR 
+#MULTI
+#EN	UPOS	FR	PRIORITY_FR	COMMENTS_FR
+black cat	noun	panthère	4	
+to feel under the weather	noun	ne pas se sentir bien	4	
+a piece of cake	noun	Quelque chose de très facile	4	
+to cross one’s fingers	verb	croiser les doigts	4	
+take it easy	verb	détends-toi	4	
+go round in circles	noun	tourner en rond	4	
+to sleep on it	noun	la nuit porte conseil	4	
+to know it like the back of one’s hand	verb	connaître quelque chose sur le bout des doigts	4	
+once in a blue moon	noun	tous les 36 du mois	4	
+out of the blue	adjective	sans crier gare	4	
+as easy as a duck soup	noun	un jeu d’enfant	4	
+the cream of the crop	noun	la crème de la crème	4	
+un early bird	noun	un lève tôt	4	
+a cock and bull story	noun	une histoire à dormir debout	4	
+to create a storm in a teacup	verb	en faire tout un fromage	4	
+that rings me a bell	noun	cela me dit quelque chose	4	
+we are in deep water	noun	on est dans le pétrin	4	
+as good as gold	noun	bien élevé	4	
+to spill the beans	verb	vendre la mèche	4	
+to get cold feet	verb	avoir le trac	4	
+to work my fingers to the bone	verb	travailler d'arrache-pied	4	
+all ears	noun	tout ouïe	4	
