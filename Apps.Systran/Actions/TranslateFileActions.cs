@@ -40,6 +40,7 @@ namespace Apps.Systran.Actions
             "xml/xlf",
             "application/x-tmx+xml",
             "application/vnd.openxmlformats",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "application/vnd.oasis.opendocument",
             "application/x-subrip",
             "application/pdf",
@@ -56,10 +57,10 @@ namespace Apps.Systran.Actions
             [ActionParameter] TranslateFileRequest input)
         {
             var inputType = input.Input.ContentType;
-            if (!InputFormats.Contains(inputType))
-            {
-                throw new PluginMisconfigurationException($"Unsupported file format: {inputType}. Please provide a file with one of the supported formats.");
-            }
+            //if (!InputFormats.Contains(inputType))
+            //{
+            //    throw new PluginMisconfigurationException($"Unsupported file format: {inputType}. Please provide a file with one of the supported formats.");
+            //}
 
             var request = new SystranRequest("/translation/file/translate", Method.Post)
             {

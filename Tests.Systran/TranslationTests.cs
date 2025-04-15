@@ -39,7 +39,7 @@ namespace Tests.Systran
         public async Task TranslateFile_ValidFile_ReturnsResponse()
         {
             // Arrange
-            var fileReference = await FileManager.UploadTestFileAsync("Translate.txt");
+            var fileReference = await FileManager.UploadTestFileAsync("Договір_Оренда_Стоколос.docx");
 
             var inputRequest = new TranslateFileRequest
             {
