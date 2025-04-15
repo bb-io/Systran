@@ -12,11 +12,11 @@ namespace Tests.Systran
         public async Task CreateDictionary_ValidFile_ReturnsResponse()
         {
             // Arrange
-            var fileReference = await FileManager.UploadTestFileAsync("tsv.txt");
-
+            var fileReference = await FileManager.UploadTestFileAsync("test.tbx");
+            //tsv.txt
             var parameters = new CreateDictionaryParameters
             {
-                Name = "YOUR_DICTIONARY_NAME",
+                Name = "YOUR_DICTIONARY_NAME1",
                 SourcePos = "noun",
                 Comment = "Test comment",
                 Type = "UD",

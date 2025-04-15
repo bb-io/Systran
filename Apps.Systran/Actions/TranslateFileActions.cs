@@ -40,6 +40,7 @@ namespace Apps.Systran.Actions
             "xml/xlf",
             "application/x-tmx+xml",
             "application/vnd.openxmlformats",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "application/vnd.oasis.opendocument",
             "application/x-subrip",
             "application/pdf",

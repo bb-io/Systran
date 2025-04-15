@@ -39,7 +39,7 @@ namespace Tests.Systran
         public async Task TranslateFile_ValidFile_ReturnsResponse()
         {
             // Arrange
-            var fileReference = await FileManager.UploadTestFileAsync("Translate.txt");
+            var fileReference = await FileManager.UploadTestFileAsync("Client.txt");
 
             var inputRequest = new TranslateFileRequest
             {
@@ -49,8 +49,8 @@ namespace Tests.Systran
 
             var inputOptions = new TranslateLanguagesOptions
             {
-                Source = "en",
-                Target = "fr"
+                Source = "es",
+                Target = "en"
             };
 
             var actions = new TranslateFileActions(InvocationContext, FileManager);
