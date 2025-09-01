@@ -1,7 +1,7 @@
-﻿using Apps.App.Actions;
-using Apps.Systran.Actions;
+﻿using Apps.Systran.Actions;
 using Apps.Systran.Models;
 using Apps.Systran.Models.Request;
+using Blackbird.Applications.Sdk.Common.Files;
 using SystranTests.Base;
 
 namespace Tests.Systran
@@ -13,22 +13,18 @@ namespace Tests.Systran
         public async Task TranslateTextReturnsValidResponse()
         {
             // Arrange
-            var inputOptions = new TranslateLanguagesOptions
-            {
-                Source = "en",
-                Target = "fr"
-            };
-
             var inputRequest = new TranslateTextRequest
             {
-                Input = "YOUR_INPUT_TEXT",
-                WithInfo = true
+                Text = "YOUR_INPUT_TEXT",
+                WithInfo = true,
+                Source = "en",
+                TargetLanguage = "fr"
             };
 
-            var actions = new TranslateTextActions(InvocationContext);
+            var actions = new TranslationActions(InvocationContext, FileManager);
 
             // Act
-            var result = await actions.TranslateText(inputOptions, inputRequest);
+            var result = await actions.TranslateText(inputRequest);
 
             // Assert
             Assert.IsNotNull(result, "Response is null.");
@@ -43,24 +39,18 @@ namespace Tests.Systran
 
             var inputRequest = new TranslateFileRequest
             {
-                Input = fileReference,
+                File = fileReference,
                 Profile = null
-            };
-
-            var inputOptions = new TranslateLanguagesOptions
-            {
-                Source = "es",
-                Target = "en"
             };
 
             var actions = new TranslateFileActions(InvocationContext, FileManager);
 
             // Act
-            var result = await actions.TranslateFile(inputOptions, inputRequest);
+            var result = await actions.TranslateFile(inputRequest);
 
             // Assert
             Assert.IsNotNull(result, "Response is null.");
-            Assert.IsNotNull(result.FileResponse, "Translated file is null.");
+            Assert.IsNotNull(result.File, "Translated file is null.");
         }
 
         [TestMethod]
@@ -71,7 +61,7 @@ namespace Tests.Systran
 
             var inputRequest = new TranslateFileRequest
             {
-                Input = fileReference,
+                File = fileReference,
                 Profile = null
             };
 
@@ -88,6 +78,26 @@ namespace Tests.Systran
             // Assert
             Assert.IsNotNull(result, "Response is null.");
             Assert.IsFalse(string.IsNullOrEmpty(result.RequestId), "Request ID is empty or null.");
+        }
+
+
+        [TestMethod]
+        public async Task Translate_ValidInput_ReturnsRequestId()
+        {
+            var action = new TranslationActions(InvocationContext, FileManager);
+
+            var response = await action.Translate(new TranslateFileRequest
+            {
+                File = new FileReference { Name = "contentful.html 1.2.xliff" },
+                Source = "en",
+                TargetLanguage = "fr",
+                //OutputFileHandling = "original",
+                FileTranslationStrategy = "blackbird"
+            });
+
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            Console.WriteLine(json);
+            Assert.IsNotNull(response);
         }
 
     }

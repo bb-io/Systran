@@ -13,7 +13,7 @@ using RestSharp;
 
 namespace Apps.Systran.Actions
 {
-    [ActionList]
+    [ActionList("Translation (Obsolete)")]
     public class TranslateFileActions : SystranInvocable
     {
         private readonly IFileManagementClient _fileManagementClient;
@@ -53,10 +53,9 @@ namespace Apps.Systran.Actions
 
         [Action("Translate file", Description = "Translate a file from source language to target language")]
         public async Task<FileReferenceResponse> TranslateFile(
-            [ActionParameter] TranslateLanguagesOptions options,
             [ActionParameter] TranslateFileRequest input)
         {
-            var inputType = input.Input.ContentType;
+            var inputType = input.File.ContentType;
             if (!InputFormats.Contains(inputType))
             {
                 throw new PluginMisconfigurationException($"Unsupported file format: {inputType}. Please provide a file with one of the supported formats.");
@@ -67,18 +66,18 @@ namespace Apps.Systran.Actions
                 AlwaysMultipartFormData = true
             };
 
-            if (!string.IsNullOrEmpty(options.Source))
-                request.AddQueryParameter("source", options.Source);
+            if (!string.IsNullOrEmpty(input.Source))
+                request.AddQueryParameter("source", input.Source);
 
-            if (!string.IsNullOrEmpty(options.Target))
-                request.AddQueryParameter("target", options.Target);
+            if (!string.IsNullOrEmpty(input.TargetLanguage))
+                request.AddQueryParameter("target", input.TargetLanguage);
 
             if (!string.IsNullOrEmpty(input.Profile))
                 request.AddQueryParameter("profile", input.Profile);
 
-            var fileStream = await _fileManagementClient.DownloadAsync(input.Input);
+            var fileStream = await _fileManagementClient.DownloadAsync(input.File);
 
-            request.AddFile("input", () => fileStream, input.Input.Name);
+            request.AddFile("input", () => fileStream, input.File.Name);
 
             var rawResponse = await Client.ExecuteAsync(request);
 
@@ -90,9 +89,9 @@ namespace Apps.Systran.Actions
             var translatedFile = await _fileManagementClient.UploadAsync(
                 new MemoryStream(rawResponse.RawBytes),
                 rawResponse.ContentType,
-                $"{Path.GetFileNameWithoutExtension(input.Input.Name)}_translated{Path.GetExtension(input.Input.Name)}");
+                $"{Path.GetFileNameWithoutExtension(input.File.Name)}_translated{Path.GetExtension(input.File.Name)}");
 
-            return new FileReferenceResponse { FileResponse = translatedFile };
+            return new FileReferenceResponse { File = translatedFile };
         }
 
         [Action("Translate file (Async)", Description = "Translate a file from source language to target language")]
@@ -100,7 +99,7 @@ namespace Apps.Systran.Actions
             [ActionParameter] TranslateLanguagesOptions options,
             [ActionParameter] TranslateFileRequest input)
         {
-            var inputType = input.Input.ContentType;
+            var inputType = input.File.ContentType;
             if (!InputFormats.Contains(inputType))
             {
                 throw new PluginMisconfigurationException($"Unsupported file format: {inputType}. Please provide a file with one of the supported formats.");
@@ -122,9 +121,9 @@ namespace Apps.Systran.Actions
 
             request.AddQueryParameter("async", true);
 
-            using var fileStream = await _fileManagementClient.DownloadAsync(input.Input);
+            using var fileStream = await _fileManagementClient.DownloadAsync(input.File);
 
-            request.AddFile("input", () => fileStream, input.Input.Name);
+            request.AddFile("input", () => fileStream, input.File.Name);
 
             var rawResponse = await Client.ExecuteWithErrorHandling<TranslateFileAsyncResponse>(request);
 
@@ -159,7 +158,7 @@ namespace Apps.Systran.Actions
                 rawResponse.ContentType,
                 $"{requestId}");
 
-            return new FileReferenceResponse { FileResponse = translatedFile };
+            return new FileReferenceResponse { File = translatedFile };
         }
     }
 }

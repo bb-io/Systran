@@ -11,7 +11,7 @@ using RestSharp;
 
 namespace Apps.Systran.Actions
 {
-    [ActionList]
+    [ActionList("Corpus")]
     public class CorpusActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : SystranInvocable(invocationContext)
     {
         [Action("Export corpus", Description = "Export a corpus as TMX file by its ID")]
@@ -40,7 +40,7 @@ namespace Apps.Systran.Actions
 
                 return new FileReferenceResponse
                 {
-                    FileResponse = fileReference
+                    File = fileReference
                 };
             }
         }

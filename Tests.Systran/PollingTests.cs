@@ -19,7 +19,7 @@ namespace Tests.Systran
 
             var inputRequest = new TranslateFileRequest
             {
-                Input = fileReference,
+                File = fileReference,
                 Profile = null
             };
 
