@@ -50,7 +50,7 @@ namespace Tests.Systran
             var result = await actions.ExportCorpus(parameters);
 
             Assert.IsNotNull(result, "Response is null.");
-            Assert.IsNotNull(result.FileResponse, "FileResponse is null.");
+            Assert.IsNotNull(result.File, "FileResponse is null.");
         }
     }
 }

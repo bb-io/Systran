@@ -57,8 +57,8 @@ namespace Tests.Systran
 
             // Assert
             Assert.IsNotNull(result, "Response is null.");
-            Assert.IsNotNull(result.FileResponse, "TBX file is null.");
-            Assert.IsFalse(string.IsNullOrEmpty(result.FileResponse.Name), "TBX file name is empty.");
+            Assert.IsNotNull(result.File, "TBX file is null.");
+            Assert.IsFalse(string.IsNullOrEmpty(result.File.Name), "TBX file name is empty.");
         }
 
         [TestMethod]

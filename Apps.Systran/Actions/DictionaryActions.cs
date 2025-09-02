@@ -18,7 +18,7 @@ using RestSharp;
 
 namespace Apps.Systran.Actions
 {
-    [ActionList]
+    [ActionList("Dictionary")]
     public class DictionaryActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : SystranInvocable(invocationContext)
     {
         [Action("Create dictionary", Description = "Create a dictionary and populate it using a TBX or TSV(SYSTRAN standart) file")]
@@ -203,7 +203,7 @@ namespace Apps.Systran.Actions
 
             return new FileReferenceResponse
             {
-                FileResponse = fileReference
+                File = fileReference
             };
         }
 
