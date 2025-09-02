@@ -6,7 +6,7 @@ namespace Apps.Systran.Models.Response
 {
     public class FileReferenceResponse : ITranslateFileOutput
     {
-        [Display("File")]
+        [Display("Translated file")]
         public FileReference File { get; set; }
     }
 }

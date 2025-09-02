@@ -7,7 +7,7 @@ namespace Apps.Systran.Models.Request
 {
     public class TranslateTextRequest : ITranslateTextInput
     {
-        [Display("Input text")]
+        [Display("Text")]
         public string Text { get; set; }
 
         [Display("Profile ID")]
@@ -26,11 +26,11 @@ namespace Apps.Systran.Models.Request
         [Display("Back translation")]
         public bool? BackTranslation { get; set; }
 
-        [Display("Source language code")]
+        [Display("Source language")]
         [DataSource(typeof(SupportedLanguagesDataHandler))]
         public string Source { get; set; }
 
-        [Display("Target language code")]
+        [Display("Target language")]
         [DataSource(typeof(SupportedLanguagesDataHandler))]
         public string TargetLanguage { get; set; }
     }

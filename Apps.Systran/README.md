@@ -39,16 +39,12 @@ Before you can connect you need to make sure that:
 - **Update dictionary from TBX file** Import entries from a `.tbx` file to update an existing dictionary.
 
 
-### File
+### Translation
 
-- **Translate file** Translate a file from source language to target language
+- **Translate** Translate a file from source language to target language. There is 2 strategies 'Systran' and 'Blackbird'. 'Systran' strategy uses native functionality. 'Blackbird' strategy uses Blackbird's translation the file and it is the default, to change it, please use property 'File Translation Strategy'. 
 - **Translate file (Async)** Translate a file from source language to target language
 - **Download translated file** Download a translated file by request ID
-
-### Text
-
 - **Translate text** Translate text
-
 
 ## Events
 

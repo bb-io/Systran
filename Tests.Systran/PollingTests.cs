@@ -32,7 +32,7 @@ namespace Tests.Systran
             var actions = new TranslationPollingList(InvocationContext, FileManager);
 
             // Act
-            var translateAction = new TranslateFileActions(InvocationContext, FileManager);
+            var translateAction = new TranslationActions(InvocationContext, FileManager);
             var translateResponse = await translateAction.TranslateFileAsync(inputOptions, inputRequest);
 
             Assert.IsNotNull(translateResponse, "Translate response is null.");

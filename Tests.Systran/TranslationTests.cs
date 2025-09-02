@@ -43,10 +43,10 @@ namespace Tests.Systran
                 Profile = null
             };
 
-            var actions = new TranslateFileActions(InvocationContext, FileManager);
+            var actions = new TranslationActions(InvocationContext, FileManager);
 
             // Act
-            var result = await actions.TranslateFile(inputRequest);
+            var result = await actions.Translate(inputRequest);
 
             // Assert
             Assert.IsNotNull(result, "Response is null.");
@@ -71,7 +71,7 @@ namespace Tests.Systran
                 Target = "fr"
             };
 
-            var actions = new TranslateFileActions(InvocationContext, FileManager);
+            var actions = new TranslationActions(InvocationContext, FileManager);
             // Act
             var result = await actions.TranslateFileAsync(inputOptions, inputRequest);
 
@@ -88,11 +88,11 @@ namespace Tests.Systran
 
             var response = await action.Translate(new TranslateFileRequest
             {
-                File = new FileReference { Name = "contentful.html 1.2.xliff" },
+                File = new FileReference { Name = "Translate.txt" },
                 Source = "en",
                 TargetLanguage = "fr",
                 //OutputFileHandling = "original",
-                FileTranslationStrategy = "blackbird"
+                FileTranslationStrategy = "systran"
             });
 
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(response);

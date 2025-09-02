@@ -18,6 +18,8 @@ using Blackbird.Filters.Transformations;
 using Blackbird.Filters.Constants;
 using Blackbird.Filters.Enums;
 using Blackbird.Filters.Extensions;
+using Apps.Systran.Models;
+using Apps.Systran.Polling.Models;
 
 namespace Apps.Systran.Actions
 {
@@ -127,6 +129,73 @@ namespace Apps.Systran.Actions
                         "Try setting the file translation strategy to Systran native.");
                 }
             }
+        }
+
+        [Action("Translate file (Async)", Description = "Translate a file from source language to target language")]
+        public async Task<TranslateFileAsyncResponse> TranslateFileAsync(
+          [ActionParameter] TranslateLanguagesOptions options,
+          [ActionParameter] TranslateFileRequest input)
+        {
+            var inputType = input.File.ContentType;
+            if (!InputFormats.Contains(inputType))
+            {
+                throw new PluginMisconfigurationException($"Unsupported file format: {inputType}. Please provide a file with one of the supported formats.");
+            }
+
+            var request = new SystranRequest("/translation/file/translate", Method.Post)
+            {
+                AlwaysMultipartFormData = true
+            };
+
+            if (!string.IsNullOrEmpty(options.Source))
+                request.AddQueryParameter("source", options.Source);
+
+            if (!string.IsNullOrEmpty(options.Target))
+                request.AddQueryParameter("target", options.Target);
+
+            if (!string.IsNullOrEmpty(input.Profile))
+                request.AddQueryParameter("profile", input.Profile);
+
+            request.AddQueryParameter("async", true);
+
+            using var fileStream = await _fileManagementClient.DownloadAsync(input.File);
+
+            request.AddFile("input", () => fileStream, input.File.Name);
+
+            var rawResponse = await Client.ExecuteWithErrorHandling<TranslateFileAsyncResponse>(request);
+
+            return new TranslateFileAsyncResponse { RequestId = rawResponse.RequestId };
+        }
+
+        [Action("Download translated file", Description = "Download a translated file by request ID")]
+        public async Task<FileReferenceResponse> DownloadTranslatedFile([ActionParameter] string requestId)
+        {
+            var statusRequest = new SystranRequest("/translation/file/status", Method.Get);
+            statusRequest.AddQueryParameter("requestId", requestId);
+
+            var statusResponse = await Client.ExecuteAsync<TranslationStatusResponse>(statusRequest);
+
+            if (statusResponse.Data == null || statusResponse.Data.Status != "finished")
+            {
+                throw new PluginApplicationException("Translation is not finished yet or request ID is invalid.");
+            }
+
+            var resultRequest = new SystranRequest("/translation/file/result", Method.Get);
+            resultRequest.AddQueryParameter("requestId", requestId);
+
+            var rawResponse = await Client.ExecuteAsync(resultRequest);
+
+            if (!rawResponse.IsSuccessful || rawResponse.RawBytes == null)
+            {
+                throw new PluginApplicationException($"Failed to retrieve the translation result. Status: {rawResponse.StatusCode}, Error: {rawResponse.ErrorMessage}");
+            }
+
+            var translatedFile = await _fileManagementClient.UploadAsync(
+                new MemoryStream(rawResponse.RawBytes),
+                rawResponse.ContentType,
+                $"{requestId}");
+
+            return new FileReferenceResponse { File = translatedFile };
         }
 
         private async Task<FileReferenceResponse> HandleInteroperableTransformation(Transformation content, TranslateFileRequest input)
